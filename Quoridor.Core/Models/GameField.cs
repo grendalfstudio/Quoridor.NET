@@ -23,6 +23,11 @@ namespace HavocAndCry.Quoridor.Core.Models
         public IReadOnlyList<Wall> Walls => _walls;
         public IReadOnlyList<Player> Players => _players;
 
+        public void AddWall(Wall wall)
+        {
+            _walls.Add(wall);
+        }
+
         public bool IsWallAt(WallCenter wallCenter)
         {
             return _walls.Any(w => w.WallCenter.Equals(wallCenter));

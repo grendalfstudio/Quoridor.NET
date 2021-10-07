@@ -7,7 +7,7 @@ namespace HavocAndCry.Quoridor.Model.Validators
 {
     public static class TurnValidator
     {
-        public static bool IsMoveValid(IGameField gameField, int row, int column, int playerId)
+        public static bool IsMoveValid(IGameField gameField, int row, int column, Player player)
         {
             if (gameField.Players.Any(p => p.Row == row && p.Column == column))
             {
@@ -18,7 +18,6 @@ namespace HavocAndCry.Quoridor.Model.Validators
             {
                 return false;
             }
-            var player = gameField.Players.First(p => p.PlayerId == playerId);
             if (player.Row != row && player.Column != column || player.Row - row == 2 || player.Column - column == 2)
             {
                 return IsSpecialMoveValid(gameField, row, column, player);
@@ -67,8 +66,30 @@ namespace HavocAndCry.Quoridor.Model.Validators
             {
                 return false;
             }
+            
+            if (newWall.WallCenter.NorthRow < 0 
+                || newWall.WallCenter.NorthRow > gameField.Size - 2
+                || newWall.WallCenter.WestColumn < 0 
+                || newWall.WallCenter.WestColumn > gameField.Size - 2)
+            {
+                return false;
+            }
 
             if (gameField.IsWallAt(newWall.WallCenter))
+            {
+                return false;
+            }
+            
+            if (newWall.Type == WallType.Horizontal
+                && (gameField.IsWallAt(new WallCenter(newWall.WallCenter.NorthRow, newWall.WallCenter.WestColumn - 1), WallType.Horizontal)
+                || gameField.IsWallAt(new WallCenter(newWall.WallCenter.NorthRow, newWall.WallCenter.WestColumn + 1),WallType.Horizontal)))
+            {
+                return false;
+            }
+            
+            if (newWall.Type == WallType.Vertical
+                && gameField.IsWallAt(new WallCenter(newWall.WallCenter.NorthRow - 1, newWall.WallCenter.WestColumn), WallType.Vertical)
+                || gameField.IsWallAt(new WallCenter(newWall.WallCenter.NorthRow + 1, newWall.WallCenter.WestColumn), WallType.Vertical))
             {
                 return false;
             }

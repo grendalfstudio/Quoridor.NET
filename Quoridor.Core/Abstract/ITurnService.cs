@@ -8,7 +8,7 @@ namespace HavocAndCry.Quoridor.Core.Abstract
     {
         event Action<int> OnPlayerReachedFinish;
         bool TryMove(MoveDirection direction, int playerId);
-        bool TrySetWall(Wall wall);
+        bool TrySetWall(Wall wall, int playerId);
         List<MoveDirection> GetPossibleMoves(int playerId);
     }
 }
