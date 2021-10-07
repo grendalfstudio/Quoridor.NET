@@ -20,8 +20,7 @@ namespace HavocAndCry.Quoridor.Core.Pathfinding
             {
                 WaveStep waveStep = queue.Dequeue();
 
-                if (waveStep.Row < 0 || waveStep.Row >= gameField.Size || waveStep.Column < 0
-                    || waveStep.Column >= gameField.Size)
+                if (waveStep.Row < 0 || waveStep.Row >= gameField.Size || waveStep.Column < 0 || waveStep.Column >= gameField.Size)
                 {
                     continue;
                 }
