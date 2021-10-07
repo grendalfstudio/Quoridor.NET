@@ -7,10 +7,10 @@ namespace HavocAndCry.Quoridor.Core.Abstract
 {
     public interface IGameField
     {
+        int Size { get; }
         IReadOnlyList<Wall> Walls { get; }
         IReadOnlyList<Player> Players { get; }
         bool IsWallAt(WallCenter wallCenter);
-        bool IsHorizontalWallAt(WallCenter wallCenter);
-        bool IsVerticalWallAt(WallCenter wallCenter);
+        bool IsWallAt(WallCenter wallCenter, WallType wallType);
     }
 }
