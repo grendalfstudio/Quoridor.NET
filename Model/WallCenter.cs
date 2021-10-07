@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model
+namespace HavocAndCry.Quoridor.Model
 {
     public struct WallCenter
     {

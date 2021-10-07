@@ -1,4 +1,4 @@
-﻿namespace Model
+﻿namespace HavocAndCry.Quoridor.Model
 {
     public enum WallType
     {
