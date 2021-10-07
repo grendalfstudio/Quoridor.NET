@@ -7,10 +7,10 @@ using HavocAndCry.Quoridor.Core.Models;
 
 namespace HavocAndCry.Quoridor.Core.Pathfinding
 {
-    public class PathFinder
+    // Path finder that uses wave (Lee) algorithm to find a path
+    public class WavePathFinder : IPathFinder
     {
-        // Finds whether a path from player to his finish row exists using Lee (wave) algorithm
-        public static bool IsPathToExit(Player player, GameField gameField)
+        public bool IsPathToFinishExists(Player player, GameField gameField)
         {
             int[,] labyrinth = new int[gameField.Size, gameField.Size];
             Queue<WaveStep> queue = new Queue<WaveStep>();
