@@ -3,24 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HavocAndCry.Quoridor.Core.Abstract;
 
 namespace HavocAndCry.Quoridor.Core.Models
 {
-    public class GameField
+    public class GameField : IGameField
     {
-        private readonly Dictionary<WallCenter, WallType> walls;
+        private readonly List<Wall> __walls;
+        private readonly List<Player> _players;
 
-        public GameField()
+        public GameField(int playersAmount)
         {
-            walls = new Dictionary<WallCenter, WallType>();
-            FirstPlayer = new Player(8, 4, 0);
-            SecondPlayer = new Player(0, 4, 8);
+            __walls = new List<Wall>();
+            /*for (int i = 0; i < playersAmount; i++)
+            {
+                _players.Add(new Player());
+            }*/
+            //FirstPlayer = new Player(8, 4, 0);
+            //SecondPlayer = new Player(0, 4, 8);
         }
 
         public int Size => 9;
-        public IReadOnlyDictionary<WallCenter, WallType> Walls => walls;
-        public Player FirstPlayer { get; }
-        public Player SecondPlayer { get; }
+        public IReadOnlyList<Wall> Walls => __walls;
+        public IReadOnlyList<Player> Players => _players;
 
         public bool TryAddWall(WallCenter wallCenter, WallType wallType)
         {
@@ -50,23 +55,23 @@ namespace HavocAndCry.Quoridor.Core.Models
                     break;
             }
 
-            walls.Add(wallCenter, wallType);
+            __walls.Add(new Wall(wallType, wallCenter));
             return true;
         }
 
         public bool IsWallAt(WallCenter wallCenter)
         {
-            return walls.ContainsKey(wallCenter);
+            return false; //_walls.Contains();
         }
 
         public bool IsHorizontalWallAt(WallCenter wallCenter)
         {
-            return walls.ContainsKey(wallCenter) && walls[wallCenter] == WallType.Horizontal;
+            return false; //_walls.ContainsKey(wallCenter) && _walls[wallCenter] == WallType.Horizontal;
         }
 
         public bool IsVerticalWallAt(WallCenter wallCenter)
         {
-            return walls.ContainsKey(wallCenter) && walls[wallCenter] == WallType.Vertical;
+            return false; //_walls.ContainsKey(wallCenter) && _walls[wallCenter] == WallType.Vertical;
         }
     }
 }
