@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HavocAndCry.Quoridor.Model
+namespace HavocAndCry.Quoridor.Core.Pathfinding
 {
     public class WaveStep
     {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HavocAndCry.Quoridor.Core.Models;
 
-namespace HavocAndCry.Quoridor.Model
+namespace HavocAndCry.Quoridor.Core.Pathfinding
 {
     public class PathFinder
     {
