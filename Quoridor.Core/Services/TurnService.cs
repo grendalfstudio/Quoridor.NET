@@ -26,11 +26,10 @@ namespace HavocAndCry.Quoridor.Model.Services
         {
             var player = _gameField.Players.First(p => p.PlayerId == playerId);
             var coordinates = GetCoordinateFromDirection(direction, player);
-            if (!TurnValidator.IsMoveValid(_gameField, coordinates.Item1, coordinates.Item2, player))
-            {
-                return false;
-            }
             
+            if (!TurnValidator.IsMoveValid(_gameField, coordinates.Item1, coordinates.Item2, player))
+                return false;
+
             player.MovePlayer(coordinates.Item1, coordinates.Item2);
             CheckWinCondition(player);
             return true;
@@ -39,10 +38,8 @@ namespace HavocAndCry.Quoridor.Model.Services
         public bool TrySetWall(Wall wall, int playerId)
         {
             if (!TurnValidator.IsWallValid(_gameField, wall, playerId, _pathFinder))
-            {
                 return false;
-            }
-            
+
             _gameField.AddWall(wall);
             return true;
         }
