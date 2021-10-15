@@ -1,4 +1,4 @@
-name: dotnet package
+name: dotnet build
 
 on: [push]
 
@@ -10,12 +10,9 @@ jobs:
         dotnet-version: ["6.0.x"]
     steps:
       - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v1.7.2
+      - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: '6.0.x'
           include-prerelease: true
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - run: dotnet build <my project>
+
