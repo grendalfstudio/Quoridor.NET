@@ -10,17 +10,22 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
     {
         private const int FieldViewSize = 18;
         private static readonly char[] PlayerMarkers = { 'A', 'B', 'C', 'D' };
-        
+
+        private readonly IGameField _gameField;
         private readonly int _numOfPlayers;
         private readonly char[,] _internalGameField;
 
-        public GameFieldViewModel(int numOfPlayers)
+        public GameFieldViewModel(IGameField gameField)
         {
-            _numOfPlayers = numOfPlayers;
+            _gameField = gameField;
+            _numOfPlayers = gameField.Players.Count;
             _internalGameField = new char[FieldViewSize, FieldViewSize];
+            IsChanged = true;
         }
 
-        public void UpdateFieldView(IGameField gameField)
+        public bool IsChanged { get; set; }
+
+        public void UpdateFieldView()
         {
             for (int i = 0; i < FieldViewSize; i++)
             {
@@ -40,7 +45,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
                 }
             }
 
-            IReadOnlyCollection<Wall> walls = gameField.Walls;
+            IReadOnlyCollection<Wall> walls = _gameField.Walls;
             foreach (var wall in walls)
             {
                 int wallRow = 2 * wall.WallCenter.NorthRow + 1;
@@ -62,11 +67,11 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
 
             for (int i = 0; i < _numOfPlayers; i++)
             {
-                _internalGameField[2 * gameField.Players[i].Row+1, 2 * gameField.Players[i].Column+1] = PlayerMarkers[i];
+                _internalGameField[2 * _gameField.Players[i].Row+1, 2 * _gameField.Players[i].Column+1] = PlayerMarkers[i];
             }
         }
 
-        public void PrintField()
+        public string PrintField()
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append('\n', 2);
@@ -75,12 +80,16 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
                 stringBuilder.Append(' ', 25);
                 for (int j = 0; j < FieldViewSize; j++)
                 {
-                    stringBuilder.Append(_internalGameField[i, j]);
+                    var sym = _internalGameField[i, j];
+                    if (sym is >= '1' and <= '9')
+                        stringBuilder.Append(' ').Append(sym);
+                    else 
+                        stringBuilder.Append(sym, 2);
                 }
                 stringBuilder.AppendLine();
             }
 
-            Console.WriteLine(stringBuilder.ToString());
+            return stringBuilder.ToString();
         }
     }
 }

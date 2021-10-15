@@ -7,6 +7,10 @@ namespace HavocAndCry.Quoridor.ConsoleClient
 {
     public static class Menu
     {
+        private static ConsoleView _consoleView;
+
+        public static void InitializeWithView(ConsoleView consoleView) => _consoleView = consoleView;
+        
         public static MainMenuOptions RequestMainMenuOption()
         {
             while (true)
@@ -43,8 +47,9 @@ namespace HavocAndCry.Quoridor.ConsoleClient
 
         public static TurnMenuOptions RequestTurnMenuOption()
         {
-            Console.WriteLine("\t1 - Move");
-            Console.WriteLine("\t2 - Set wall");
+            _consoleView.WriteLine("\t1 - Move");
+            _consoleView.WriteLine("\t2 - Set wall");
+            _consoleView.Redraw();
             
             while (true)
             {
@@ -52,42 +57,20 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                 if (int.TryParse(input, out var result) && Enum.IsDefined(typeof(TurnMenuOptions), result) ) 
                     return (TurnMenuOptions)result;
                 
-                Console.WriteLine("\tInvalid input. Press any key");
-                Console.ReadKey();
-            }
-        }
-
-        public static MoveDirection RequestMoveDirection(ICollection<MoveDirection> possibleMoves)
-        {
-            Console.WriteLine("\tChoose direction:");
-
-            foreach (var moveDirection in possibleMoves)
-            {
-                Console.WriteLine($"\t{(int)moveDirection} - {moveDirection.ToString()}");
-            }
-            
-            while (true)
-            {
-                var input = Console.ReadLine();
-                if (int.TryParse(input, out var result) 
-                    && Enum.IsDefined(typeof(MoveDirection), result) 
-                    && possibleMoves.Contains((MoveDirection)result))
-                {
-                    return (MoveDirection)result;
-                }
-                
-                Console.WriteLine("\tInvalid input. Press any key");
+                _consoleView.WriteLine("\tInvalid input. Press any key");
+                _consoleView.Redraw();
                 Console.ReadKey();
             }
         }
 
         public static Wall RequestWall()
         {
-            Console.Clear();
-            Console.WriteLine("Wall will be placed under the selected cells if it is horizontal,\n or to the right if it is vertical\n");
-            Console.WriteLine("\tSelect wall orientation:");
-            Console.WriteLine("\t1 - Horizontal");
-            Console.WriteLine("\t2 - Vertical");
+            _consoleView.Clear();
+            _consoleView.WriteLine("Wall will be placed under the selected cells if it is horizontal,\n or to the right if it is vertical\n");
+            _consoleView.WriteLine("\tSelect wall orientation:");
+            _consoleView.WriteLine("\t1 - Horizontal");
+            _consoleView.WriteLine("\t2 - Vertical");
+            _consoleView.Redraw();
             WallType orientation;
             WallCenter center;
 
@@ -104,11 +87,13 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                     break;
                 }
 
-                Console.WriteLine("Invalid input, try again");
+                _consoleView.WriteLine("Invalid input, try again");
+                _consoleView.Redraw();
             }
 
-            Console.WriteLine("\tEnter cells' coordinates, separated by a comma");
-            Console.WriteLine("\tFormat: row1,col1,row2,col2");
+            _consoleView.WriteLine("\tEnter cells' coordinates, separated by a comma");
+            _consoleView.WriteLine("\tFormat: row1,col1,row2,col2");
+            _consoleView.Redraw();
 
             while (true)
             {
@@ -127,37 +112,41 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                 }
                 catch (Exception _)
                 {
-                    Console.WriteLine("Invalid input, try again");
+                    _consoleView.WriteLine("Invalid input, try again");
+                    _consoleView.Redraw();
                 }
             }
 
             return new Wall(orientation, center);
         }
 
-        public static MoveDirection RequestMoveDirection(MoveDirection[] possibleMoves)
+        public static MoveDirection RequestMoveDirection(IList<MoveDirection> possibleMoves)
         {
-            Console.Clear();
-            Console.WriteLine("\tChoose move direction:");
-            for (int i = 1; i <= possibleMoves.Length; i++)
+            _consoleView.Clear();
+            _consoleView.WriteLine("\tChoose move direction:");
+            for (int i = 1; i <= possibleMoves.Count; i++)
             {
-                Console.WriteLine($"\t{i} - {possibleMoves[i-1].ToString()}");
+                _consoleView.WriteLine($"\t{i} - {possibleMoves[i-1].ToString()}");
             }
+            _consoleView.Redraw();
 
             while (true)
             {
                 var input = Console.ReadLine();
                 if (int.TryParse(input, out var result)
                     && result >= 1
-                    && result <= possibleMoves.Length)
-                    return possibleMoves[result];
+                    && result <= possibleMoves.Count)
+                    return possibleMoves[result-1];
 
-                Console.WriteLine("Invalid input, try again");
+                _consoleView.WriteLine("Invalid input, try again");
+                _consoleView.Redraw();
             }
         }
 
         public static void PrintHelp()
         {
-            Console.WriteLine("Help");
+            _consoleView.WriteLine("Help");
+            _consoleView.Redraw();
             Console.ReadKey();
         }
     }

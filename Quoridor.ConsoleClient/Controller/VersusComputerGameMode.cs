@@ -11,30 +11,36 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 {
     public class VersusComputerGameMode : IGameMode
     {
-        private readonly IGameField _gameField;
         private readonly ITurnService _turnService;
-        private readonly GameFieldViewModel _fieldViewModel;
+        private readonly ConsoleView _consoleView;
 
-        private int _currentPlayerId = 0;
-        private bool _isGameEnded = false;
+        private int _currentPlayerId = 2;
+        private bool _isGameEnded;
 
         public VersusComputerGameMode()
         {
-            _gameField = new GameField(2);
-            _turnService = new TurnService(_gameField, new WavePathFinder(), OnPlayerReachedFinish);
+            var gameField = new GameField(2);
+            _consoleView = new ConsoleView(gameField);
+            _turnService = new TurnService(gameField, new WavePathFinder(), OnPlayerReachedFinish);
+            
+            InitializeWithView(_consoleView);
         }
 
         private void OnPlayerReachedFinish(int playerId)
         {
             _isGameEnded = true;
-            Console.WriteLine($"Player with ID {playerId} won!");
+            _consoleView.Clear();
+            _consoleView.WriteLine($"Player with ID {playerId} won!\nPress any key...");
+            _consoleView.Redraw();
+            Console.ReadKey();
         }
 
         public void StartMainCycle()
         {
+            _consoleView.DrawField = true;
             while (!_isGameEnded)
             {
-                if (_currentPlayerId is 0)
+                if (_currentPlayerId is 2)
                 {
                     MakePlayerTurn();
                     _currentPlayerId = 1;
@@ -42,10 +48,9 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
                 else
                 {
                     MakeBotTurn();
-                    _currentPlayerId = 0;
+                    _currentPlayerId = 2;
                 }
-                _fieldViewModel.UpdateFieldView(_gameField);
-                _fieldViewModel.PrintField();
+                _consoleView.Redraw();
             }
         }
 
@@ -60,6 +65,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
                 case TurnMenuOptions.SetWall:
                     var wall = RequestWall();
                     _turnService.TrySetWall(wall, _currentPlayerId);
+                    _consoleView.SetFieldChanged();
                     break;
             }
         }
@@ -69,11 +75,13 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
             var possibleMoves = _turnService.GetPossibleMoves(_currentPlayerId);
             var direction = RequestMoveDirection(possibleMoves);
             _turnService.TryMove(direction, _currentPlayerId);
+            _consoleView.SetFieldChanged();
         }
 
         private void MakeBotTurn()
         {
-            Console.WriteLine("Bot's turn");
+            _consoleView.WriteLine("Bot's turn");
+            _consoleView.Redraw();
         }
     }
 }
