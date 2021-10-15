@@ -14,6 +14,7 @@ namespace HavocAndCry.Quoridor.Core.Models
         public GameField(int playersAmount)
         {
             _walls = new List<Wall>();
+            _players = new List<Player>();
             for (int i = 0; i < playersAmount; i++)
             {
                 _players.Add(PlayersPresets.Players[i]);
