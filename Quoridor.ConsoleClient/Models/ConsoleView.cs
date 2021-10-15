@@ -44,7 +44,7 @@ public class ConsoleView
             builder.AppendFormat("Player {0}: {1}\t", player.PlayerId, player.WallsCount);
         }
 
-        _fieldViewModel.UpdateFieldView();
+        _fieldViewModel.UpdateFieldView(CurrentPlayerId);
         builder.AppendLine(_fieldViewModel.PrintField());
         builder.Append($"\n\tCurrent player's ID is {CurrentPlayerId}\n");
         _fieldViewModel.IsChanged = false;

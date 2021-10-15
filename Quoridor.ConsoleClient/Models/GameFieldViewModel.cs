@@ -25,7 +25,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
 
         public bool IsChanged { get; set; }
 
-        public void UpdateFieldView()
+        public void UpdateFieldView(int currentPlayer)
         {
             for (int i = 0; i < FieldViewSize; i++)
             {
@@ -67,7 +67,11 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
 
             for (int i = 0; i < _numOfPlayers; i++)
             {
-                _internalGameField[2 * _gameField.Players[i].Row+1, 2 * _gameField.Players[i].Column+1] = PlayerMarkers[i];
+                var player = _gameField.Players[i];
+                if(player.PlayerId == currentPlayer)
+                    _internalGameField[2 * player.Row+1, 2 * player.Column+1] = '▲';
+                else
+                    _internalGameField[2 * player.Row+1, 2 * player.Column+1] = PlayerMarkers[i];
             }
         }
 
