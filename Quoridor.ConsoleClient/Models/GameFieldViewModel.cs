@@ -48,8 +48,8 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
             IReadOnlyCollection<Wall> walls = _gameField.Walls;
             foreach (var wall in walls)
             {
-                int wallRow = 2 * wall.WallCenter.NorthRow + 1;
-                int wallColumn = 2 * wall.WallCenter.WestColumn + 1;
+                int wallRow = 2 * wall.WallCenter.NorthRow + 2;
+                int wallColumn = 2 * wall.WallCenter.WestColumn + 2;
                 _internalGameField[wallRow, wallColumn] = '█';
                 
                 switch (wall.Type)

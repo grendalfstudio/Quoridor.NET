@@ -107,7 +107,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                         || col is < 0 or > 8) 
                         continue;
                     
-                    center = new WallCenter(row, col);
+                    center = new WallCenter(row-1, col-1);
                     break;
                 }
                 catch (Exception _)

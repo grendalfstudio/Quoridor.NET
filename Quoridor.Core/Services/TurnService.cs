@@ -41,6 +41,7 @@ namespace HavocAndCry.Quoridor.Model.Services
                 return false;
 
             _gameField.AddWall(wall);
+            _gameField.Players[playerId-1].SetWall();
             return true;
         }
 
