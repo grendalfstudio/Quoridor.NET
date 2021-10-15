@@ -81,6 +81,80 @@ namespace HavocAndCry.Quoridor.ConsoleClient
             }
         }
 
+        public static Wall RequestWall()
+        {
+            Console.Clear();
+            Console.WriteLine("Wall will be placed under the selected cells if it is horizontal,\n or to the right if it is vertical\n");
+            Console.WriteLine("\tSelect wall orientation:");
+            Console.WriteLine("\t1 - Horizontal");
+            Console.WriteLine("\t2 - Vertical");
+            WallType orientation;
+            WallCenter center;
+
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out var result) && result is 1 or 2)
+                {
+                    orientation = result switch
+                    {
+                        1 => WallType.Horizontal,
+                        2 => WallType.Vertical
+                    };
+                    break;
+                }
+
+                Console.WriteLine("Invalid input, try again");
+            }
+
+            Console.WriteLine("\tEnter cells' coordinates, separated by a comma");
+            Console.WriteLine("\tFormat: row1,col1,row2,col2");
+
+            while (true)
+            {
+                try
+                {
+                    var input = Console.ReadLine();
+                    var coordsTxt = input.Split(",");
+                    if (!int.TryParse(coordsTxt[0], out var row) 
+                        || !int.TryParse(coordsTxt[1], out var col) 
+                        || row is < 0 or > 8 
+                        || col is < 0 or > 8) 
+                        continue;
+                    
+                    center = new WallCenter(row, col);
+                    break;
+                }
+                catch (Exception _)
+                {
+                    Console.WriteLine("Invalid input, try again");
+                }
+            }
+
+            return new Wall(orientation, center);
+        }
+
+        public static MoveDirection RequestMoveDirection(MoveDirection[] possibleMoves)
+        {
+            Console.Clear();
+            Console.WriteLine("\tChoose move direction:");
+            for (int i = 1; i <= possibleMoves.Length; i++)
+            {
+                Console.WriteLine($"\t{i} - {possibleMoves[i-1].ToString()}");
+            }
+
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out var result)
+                    && result >= 1
+                    && result <= possibleMoves.Length)
+                    return possibleMoves[result];
+
+                Console.WriteLine("Invalid input, try again");
+            }
+        }
+
         public static void PrintHelp()
         {
             Console.WriteLine("Help");
