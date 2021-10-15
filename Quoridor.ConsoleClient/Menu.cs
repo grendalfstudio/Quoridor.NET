@@ -47,6 +47,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient
 
         public static TurnMenuOptions RequestTurnMenuOption()
         {
+            _consoleView.Clear();
             _consoleView.WriteLine("\t1 - Move");
             _consoleView.WriteLine("\t2 - Set wall");
             _consoleView.Redraw();

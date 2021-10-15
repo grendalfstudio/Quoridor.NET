@@ -18,7 +18,7 @@ public class ConsoleView
         _lowerPart = new StringBuilder();
     }
 
-    public bool DrawField { get; set; }
+    public int CurrentPlayerId { get; set; }
 
     public void SetFieldChanged() => _fieldViewModel.IsChanged = true;
 
@@ -26,20 +26,17 @@ public class ConsoleView
     {
         Console.Clear();
 
-        if (DrawField)
-        {
-            BuildUpperPart();
-            Console.WriteLine(_upperPart);
-        }
+        BuildUpperPart();
+        Console.WriteLine(_upperPart);
 
         Console.WriteLine(_lowerPart.ToString());
     }
 
     private void BuildUpperPart()
     {
-        if(!_fieldViewModel.IsChanged)
+        if (!_fieldViewModel.IsChanged)
             return;
-        
+
         var builder = new StringBuilder();
         builder.Append("\tAvailable walls:\n\t\t");
         foreach (var player in _gameField.Players)
@@ -47,11 +44,9 @@ public class ConsoleView
             builder.AppendFormat("Player {0}: {1}\t", player.PlayerId, player.WallsCount);
         }
 
-        builder.AppendLine();
-
-
         _fieldViewModel.UpdateFieldView();
         builder.AppendLine(_fieldViewModel.PrintField());
+        builder.Append($"\n\tCurrent player's ID is {CurrentPlayerId}\n");
         _fieldViewModel.IsChanged = false;
 
         _upperPart = builder.ToString();

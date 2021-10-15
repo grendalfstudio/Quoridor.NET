@@ -14,7 +14,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
         private readonly ITurnService _turnService;
         private readonly ConsoleView _consoleView;
 
-        private int _currentPlayerId = 2;
+        private int _currentPlayerId = 1;
         private bool _isGameEnded;
 
         public VersusComputerGameMode()
@@ -28,6 +28,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 
         private void OnPlayerReachedFinish(int playerId)
         {
+            _consoleView.SetFieldChanged();
             _isGameEnded = true;
             _consoleView.Clear();
             _consoleView.WriteLine($"Player with ID {playerId} won!\nPress any key...");
@@ -37,19 +38,23 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 
         public void StartMainCycle()
         {
-            _consoleView.DrawField = true;
             while (!_isGameEnded)
             {
-                if (_currentPlayerId is 2)
+                _consoleView.CurrentPlayerId = _currentPlayerId;
+                _consoleView.SetFieldChanged();
+                _consoleView.Redraw();
+                
+                if (_currentPlayerId is 1)
                 {
                     MakePlayerTurn();
-                    _currentPlayerId = 1;
+                    _currentPlayerId = 2;
                 }
                 else
                 {
                     MakeBotTurn();
-                    _currentPlayerId = 2;
+                    _currentPlayerId = 1;
                 }
+                
                 _consoleView.Redraw();
             }
         }
@@ -63,9 +68,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
                     MakeMove();
                     break;
                 case TurnMenuOptions.SetWall:
-                    var wall = RequestWall();
-                    _turnService.TrySetWall(wall, _currentPlayerId);
-                    _consoleView.SetFieldChanged();
+                    SetWall();
                     break;
             }
         }
@@ -75,6 +78,13 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
             var possibleMoves = _turnService.GetPossibleMoves(_currentPlayerId);
             var direction = RequestMoveDirection(possibleMoves);
             _turnService.TryMove(direction, _currentPlayerId);
+            _consoleView.SetFieldChanged();
+        }
+
+        private void SetWall()
+        {
+            var wall = RequestWall();
+            _turnService.TrySetWall(wall, _currentPlayerId);
             _consoleView.SetFieldChanged();
         }
 
