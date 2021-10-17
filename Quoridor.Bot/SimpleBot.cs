@@ -1,16 +1,8 @@
-﻿using HavocAndCry.Quoridor.ConsoleClient.Abstract;
-using HavocAndCry.Quoridor.Core.Abstract;
+﻿using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
-using HavocAndCry.Quoridor.Core.Pathfinding;
-using HavocAndCry.Quoridor.Model.Services;
-using HavocAndCry.Quoridor.Model.Validators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Quoridor.Bot.Abstract;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Models
+namespace Quoridor.Bot
 {
     public class SimpleBot : IBot
     {
@@ -27,12 +19,12 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Models
             return possibleDirections[randomIndex];
         }
 
-        public TurnMenuOptions RequestTurn(IGameField gameField, int playerId)
+        public TurnType RequestTurn(IGameField gameField, int playerId)
         {
             Player currentPlayer = gameField.Players.Where(p => p.PlayerId == playerId).First();
             return currentPlayer.WallsCount > 0
-                ? (TurnMenuOptions)_random.Next(1, 3)
-                : TurnMenuOptions.Move;
+                ? (TurnType)_random.Next(1, 3)
+                : TurnType.Move;
         }
 
         public void SetRandomWall(ITurnService turnService, int playerId)

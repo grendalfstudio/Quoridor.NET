@@ -45,7 +45,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient
             }
         }
 
-        public static TurnMenuOptions RequestTurnMenuOption()
+        public static TurnType RequestTurnMenuOption()
         {
             _consoleView.Clear();
             _consoleView.WriteLine("\t1 - Move");
@@ -55,8 +55,8 @@ namespace HavocAndCry.Quoridor.ConsoleClient
             while (true)
             {
                 var input = Console.ReadLine();
-                if (int.TryParse(input, out var result) && Enum.IsDefined(typeof(TurnMenuOptions), result) ) 
-                    return (TurnMenuOptions)result;
+                if (int.TryParse(input, out var result) && Enum.IsDefined(typeof(TurnType), result) ) 
+                    return (TurnType)result;
                 
                 _consoleView.WriteLine("\tInvalid input. Press any key");
                 _consoleView.Redraw();

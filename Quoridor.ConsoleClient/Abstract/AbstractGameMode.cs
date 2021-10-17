@@ -43,10 +43,10 @@ public abstract class AbstractGameMode : IGameMode
         var turn = RequestTurnMenuOption();
         switch (turn)
         {
-            case TurnMenuOptions.Move:
+            case TurnType.Move:
                 MakeMove();
                 break;
-            case TurnMenuOptions.SetWall:
+            case TurnType.SetWall:
                 SetWall();
                 break;
         }
