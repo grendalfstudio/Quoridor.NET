@@ -17,7 +17,7 @@ namespace HavocAndCry.Quoridor.Core.Models
             _players = new List<Player>();
             for (int i = 0; i < playersAmount; i++)
             {
-                _players.Add(PlayersPresets.Players[i]);
+                _players.Add(new Player(PlayersPresets.Players[i]));
             }
         }
         public int Size => 9;
