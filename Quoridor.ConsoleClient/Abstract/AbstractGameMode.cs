@@ -12,15 +12,16 @@ public abstract class AbstractGameMode : IGameMode
 {
     protected readonly ITurnService _turnService;
     protected readonly ConsoleView _consoleView;
+    protected readonly IGameField _gameField;
 
     protected int _currentPlayerId = 1;
     protected bool _isGameEnded;
 
     protected AbstractGameMode(int playersCount)
     {
-        var gameField = new GameField(playersCount);
-        _consoleView = new ConsoleView(gameField);
-        _turnService = new TurnService(gameField, new WavePathFinder(), OnPlayerReachedFinish);
+        _gameField = new GameField(playersCount);
+        _consoleView = new ConsoleView(_gameField);
+        _turnService = new TurnService(_gameField, new WavePathFinder(), OnPlayerReachedFinish);
 
         InitializeWithView(_consoleView);
     }

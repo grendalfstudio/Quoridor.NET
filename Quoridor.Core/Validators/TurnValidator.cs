@@ -43,32 +43,36 @@ namespace HavocAndCry.Quoridor.Model.Validators
 
         private static bool IsSpecialMoveValid(IGameField gameField, int row, int column, Player player)
         {
-            
             if (player.Row != row && player.Column != column)
             {
                 if (!IsPlayerOnCell(gameField, row, column)
-                    /*&& IsPlayerOnCell(gameField, specialCellRow, specialCellColumn)*/)
+                    && ((IsPlayerOnCell(gameField, row, player.Column)
+                        && !CanJumpOnCell(gameField, player.Row - (player.Row - row) * 2, player.Column, player)
+                        && !IsWallBetweenCells(gameField, row, player.Column, 
+                            row, column))
+                        || (IsPlayerOnCell(gameField, player.Row, column)
+                        && !CanJumpOnCell(gameField, player.Row, player.Column - (player.Column - column) * 2, player)
+                        && !IsWallBetweenCells(gameField, player.Row, column, 
+                            row, column))))
                 {
-                    return false;
-                    //TODO Complete all this shit
+                    return true;
                 }
+
+                return false;
             }
-            else
-            {
-                return CanJumpOnCell(gameField, row, column, player);
-            }
-            return false;
+            
+            return CanJumpOnCell(gameField, row, column, player);
         }
 
         private static bool IsWallBetweenCells(IGameField gameField, int row1, int column1, int row2, int column2)
         {
-            if (row1 == row2 && column1 > column2)
+            if (row1 == row2 && column1 < column2)
             {
                 return (gameField.IsWallAt(new WallCenter(row2 - 1, column2 - 1), WallType.Vertical) ||
                         gameField.IsWallAt(new WallCenter(row2, column2 - 1), WallType.Vertical));
             }
              
-            if (row1 == row2 && column1 < column2)
+            if (row1 == row2 && column1 > column2)
             {
                 return (gameField.IsWallAt(new WallCenter(row2 - 1, column2), WallType.Vertical) ||
                         gameField.IsWallAt(new WallCenter(row2, column2), WallType.Vertical));
@@ -96,33 +100,13 @@ namespace HavocAndCry.Quoridor.Model.Validators
 
         private static bool CanJumpOnCell(IGameField gameField, int row, int column, Player player)
         {
-            int specialCellRow = 0;
-            int specialCellColumn = 0;
-            
-            if (player.Row - row == 2)
-            {
-                specialCellRow = player.Row - 1;
-                specialCellColumn = player.Column;
-            }
-            else if (row - player.Row == 2)
-            {
-                specialCellRow = player.Row + 1;
-                specialCellColumn = player.Column;
-            }
-            else if (player.Column - column == 2)
-            {
-                specialCellRow = player.Row;
-                specialCellColumn = player.Column - 1;
-            }
-            else if (column - player.Column == 2)
-            {
-                specialCellRow = player.Row;
-                specialCellColumn = player.Column + 1;
-            }
-            else
+            if (player.Column != column && player.Row != row)
             {
                 return false;
             }
+            
+            int specialCellRow = player.Row - (player.Row - row) / 2;
+            int specialCellColumn = player.Column - (player.Column - column) / 2;
             
             if (!IsPlayerOnCell(gameField, row, column)
                 && IsPlayerOnCell(gameField, specialCellRow, specialCellColumn)
