@@ -1,13 +1,7 @@
 ﻿using System;
+using HavocAndCry.Quoridor.ConsoleClient.Controller;
 
-namespace HavocAndCry.Quoridor.ConsoleClient
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
-        }
-    }
-}
+var game = new GameController();
+game.StartGame();
+
+Console.ReadKey();

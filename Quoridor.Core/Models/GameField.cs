@@ -3,70 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HavocAndCry.Quoridor.Core.Abstract;
 
 namespace HavocAndCry.Quoridor.Core.Models
 {
-    public class GameField
+    public class GameField : IGameField
     {
-        private readonly Dictionary<WallCenter, WallType> walls;
-
-        public GameField()
+        private readonly List<Wall> _walls;
+        private readonly List<Player> _players;
+        public GameField(int playersAmount)
         {
-            walls = new Dictionary<WallCenter, WallType>();
-            FirstPlayer = new Player(8, 4, 0);
-            SecondPlayer = new Player(0, 4, 8);
+            _walls = new List<Wall>();
+            _players = new List<Player>();
+            for (int i = 0; i < playersAmount; i++)
+            {
+                _players.Add(new Player(PlayersPresets.Players[i]));
+            }
         }
-
         public int Size => 9;
-        public IReadOnlyDictionary<WallCenter, WallType> Walls => walls;
-        public Player FirstPlayer { get; }
-        public Player SecondPlayer { get; }
+        public IReadOnlyList<Wall> Walls => _walls;
+        public IReadOnlyList<Player> Players => _players;
 
-        public bool TryAddWall(WallCenter wallCenter, WallType wallType)
+        public void AddWall(Wall wall)
         {
-            if (wallCenter.NorthRow < 0 || wallCenter.NorthRow > Size - 2
-                || wallCenter.WestColumn < 0 || wallCenter.WestColumn > Size - 2)
-            {
-                return false;
-            }
-
-            switch (wallType)
-            {
-                case WallType.Horizontal:
-                    if (IsWallAt(wallCenter)
-                        || IsHorizontalWallAt(new WallCenter(wallCenter.NorthRow, wallCenter.WestColumn - 1))
-                        || IsHorizontalWallAt(new WallCenter(wallCenter.NorthRow, wallCenter.WestColumn + 1)))
-                    {
-                        return false;
-                    }
-                    break;
-                case WallType.Vertical:
-                    if (IsWallAt(wallCenter)
-                        || IsVerticalWallAt(new WallCenter(wallCenter.NorthRow - 1, wallCenter.WestColumn))
-                        || IsVerticalWallAt(new WallCenter(wallCenter.NorthRow + 1, wallCenter.WestColumn)))
-                    {
-                        return false;
-                    }
-                    break;
-            }
-
-            walls.Add(wallCenter, wallType);
-            return true;
+            _walls.Add(wall);
         }
 
         public bool IsWallAt(WallCenter wallCenter)
         {
-            return walls.ContainsKey(wallCenter);
+            return _walls.Any(w => w.WallCenter.Equals(wallCenter));
         }
 
-        public bool IsHorizontalWallAt(WallCenter wallCenter)
+        public bool IsWallAt(WallCenter wallCenter, WallType wallType)
         {
-            return walls.ContainsKey(wallCenter) && walls[wallCenter] == WallType.Horizontal;
+            return _walls.Any(w => w.WallCenter.Equals(wallCenter) && w.Type == wallType);
         }
 
-        public bool IsVerticalWallAt(WallCenter wallCenter)
+        public object Clone()
         {
-            return walls.ContainsKey(wallCenter) && walls[wallCenter] == WallType.Vertical;
+            var clone = new GameField(_players.Count);
+            foreach (var wall in Walls)
+            {
+                clone.AddWall(wall);
+            }
+            return clone;
         }
     }
 }

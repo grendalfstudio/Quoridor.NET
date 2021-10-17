@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 
 namespace HavocAndCry.Quoridor.Core.Pathfinding
@@ -10,7 +11,7 @@ namespace HavocAndCry.Quoridor.Core.Pathfinding
     // Path finder that uses wave (Lee) algorithm to find a path
     public class WavePathFinder : IPathFinder
     {
-        public bool IsPathToFinishExists(Player player, GameField gameField)
+        public bool IsPathToFinishExists(Player player, IGameField gameField)
         {
             int[,] labyrinth = new int[gameField.Size, gameField.Size];
             Queue<WaveStep> queue = new Queue<WaveStep>();
@@ -24,7 +25,8 @@ namespace HavocAndCry.Quoridor.Core.Pathfinding
                 {
                     continue;
                 }
-                else if (labyrinth[waveStep.Row, waveStep.Column] > 0)
+                
+                if (labyrinth[waveStep.Row, waveStep.Column] > 0)
                 {
                     continue;
                 }
@@ -40,23 +42,23 @@ namespace HavocAndCry.Quoridor.Core.Pathfinding
                 var southWestWallPoint = new WallCenter(waveStep.Row, waveStep.Column - 1);
                 var southEastWallPoint = new WallCenter(waveStep.Row, waveStep.Column);
 
-                if (!gameField.IsHorizontalWallAt(northWestWallPoint)
-                    && !gameField.IsHorizontalWallAt(northEastWallPoint))
+                if (!gameField.IsWallAt(northWestWallPoint, WallType.Horizontal)
+                    && !gameField.IsWallAt(northEastWallPoint, WallType.Horizontal))
                 {
                     queue.Enqueue(new WaveStep(waveStep.Row - 1, waveStep.Column, waveStep.Step + 1));
                 }
-                if (!gameField.IsHorizontalWallAt(southWestWallPoint)
-                    && !gameField.IsHorizontalWallAt(southEastWallPoint))
+                if (!gameField.IsWallAt(southWestWallPoint, WallType.Horizontal)
+                    && !gameField.IsWallAt(southEastWallPoint, WallType.Horizontal))
                 {
                     queue.Enqueue(new WaveStep(waveStep.Row + 1, waveStep.Column, waveStep.Step + 1));
                 }
-                if (!gameField.IsVerticalWallAt(northWestWallPoint)
-                    && !gameField.IsVerticalWallAt(southWestWallPoint))
+                if (!gameField.IsWallAt(northWestWallPoint, WallType.Vertical)
+                    && !gameField.IsWallAt(southWestWallPoint, WallType.Vertical))
                 {
                     queue.Enqueue(new WaveStep(waveStep.Row, waveStep.Column - 1, waveStep.Step + 1));
                 }
-                if (!gameField.IsVerticalWallAt(northEastWallPoint)
-                    && !gameField.IsVerticalWallAt(southEastWallPoint))
+                if (!gameField.IsWallAt(northEastWallPoint, WallType.Vertical)
+                    && !gameField.IsWallAt(southEastWallPoint, WallType.Vertical))
                 {
                     queue.Enqueue(new WaveStep(waveStep.Row, waveStep.Column + 1, waveStep.Step + 1));
                 }
