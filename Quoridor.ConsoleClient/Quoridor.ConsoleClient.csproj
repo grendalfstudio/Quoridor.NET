@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>HavocAndCry.Quoridor.ConsoleClient</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Quoridor.Bot\Quoridor.Bot.csproj" />
+      <ProjectReference Include="..\Quoridor.Core\Quoridor.Core.csproj" />
+    </ItemGroup>
+
+</Project>
