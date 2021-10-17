@@ -3,6 +3,8 @@ using HavocAndCry.Quoridor.ConsoleClient.Models;
 using HavocAndCry.Quoridor.Core.Models;
 using HavocAndCry.Quoridor.Model.Services;
 using System;
+using Quoridor.Bot;
+using Quoridor.Bot.Abstract;
 
 namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 {
@@ -43,10 +45,10 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
             var turn = _bot.RequestTurn(_gameField, _currentPlayerId);
             switch (turn)
             {
-                case TurnMenuOptions.Move:
+                case TurnType.Move:
                     MakeMove();
                     break;
-                case TurnMenuOptions.SetWall:
+                case TurnType.SetWall:
                     SetWall();
                     break;
             }
