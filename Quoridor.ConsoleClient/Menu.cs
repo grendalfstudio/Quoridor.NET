@@ -67,33 +67,13 @@ namespace HavocAndCry.Quoridor.ConsoleClient
         public static Wall RequestWall()
         {
             _consoleView.Clear();
-            _consoleView.WriteLine("Wall will be placed under the selected cells if it is horizontal,\n or to the right if it is vertical\n");
-            _consoleView.WriteLine("\tSelect wall orientation:");
-            _consoleView.WriteLine("\t1 - Horizontal");
-            _consoleView.WriteLine("\t2 - Vertical");
+            _consoleView.WriteLine("\tWall will be placed under the selected cells if it is horizontal,\n\t or to the right if it is vertical\n");
             _consoleView.Redraw();
             WallType orientation;
             WallCenter center;
 
-            while (true)
-            {
-                var input = Console.ReadLine();
-                if (int.TryParse(input, out var result) && result is 1 or 2)
-                {
-                    orientation = result switch
-                    {
-                        1 => WallType.Horizontal,
-                        2 => WallType.Vertical
-                    };
-                    break;
-                }
-
-                _consoleView.WriteLine("Invalid input, try again");
-                _consoleView.Redraw();
-            }
-
-            _consoleView.WriteLine("\tEnter cells' coordinates, separated by a comma");
-            _consoleView.WriteLine("\tFormat: row1,col1,row2,col2");
+            _consoleView.WriteLine("\tEnter cells' coordinates, separated by a comma. Cells must be adjacent");
+            _consoleView.WriteLine("\tFormat: [row1],[col1],[row2],[col2]");
             _consoleView.Redraw();
 
             while (true)
@@ -102,13 +82,33 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                 {
                     var input = Console.ReadLine();
                     var coordsTxt = input.Split(",");
-                    if (!int.TryParse(coordsTxt[0], out var row) 
-                        || !int.TryParse(coordsTxt[1], out var col) 
-                        || row is < 0 or > 8 
-                        || col is < 0 or > 8) 
-                        continue;
+                    var coordsInt = new List<int>(4);
+                    foreach (var s in coordsTxt)
+                    {
+                        if (int.TryParse(s, out var result) && result is > 0 and < 10)
+                        {
+                            coordsInt.Add(result);
+                        }
+                        else
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
+
+                    if (coordsInt[0] == coordsInt[2])
+                    {
+                        orientation = WallType.Horizontal;
+                    }
+                    else if (coordsInt[1] == coordsInt[3])
+                    {
+                        orientation = WallType.Vertical;
+                    }
+                    else
+                    {
+                        throw new ArgumentException();
+                    }
                     
-                    center = new WallCenter(row-1, col-1);
+                    center = new WallCenter(coordsInt[0]-1, coordsInt[1]-1);
                     break;
                 }
                 catch (Exception _)
@@ -146,8 +146,10 @@ namespace HavocAndCry.Quoridor.ConsoleClient
 
         public static void PrintHelp()
         {
-            _consoleView.WriteLine("Help");
-            _consoleView.Redraw();
+            Console.Clear();
+            Console.WriteLine("\tHelp\n");
+            Console.WriteLine("If you have any questions, feel free to contact @andrry_armor via Telegram\n");
+            Console.WriteLine("Press any key to return to menu");
             Console.ReadKey();
         }
     }
