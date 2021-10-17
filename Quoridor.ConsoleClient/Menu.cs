@@ -95,11 +95,11 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                         }
                     }
 
-                    if (coordsInt[0] == coordsInt[2])
+                    if (coordsInt[0] == coordsInt[2] && coordsInt[3] - coordsInt[1] == 1)
                     {
                         orientation = WallType.Horizontal;
                     }
-                    else if (coordsInt[1] == coordsInt[3])
+                    else if (coordsInt[1] == coordsInt[3] && coordsInt[2] - coordsInt[0] == 1)
                     {
                         orientation = WallType.Vertical;
                     }
@@ -107,7 +107,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                     {
                         throw new ArgumentException();
                     }
-                    
+
                     center = new WallCenter(coordsInt[0]-1, coordsInt[1]-1);
                     break;
                 }
