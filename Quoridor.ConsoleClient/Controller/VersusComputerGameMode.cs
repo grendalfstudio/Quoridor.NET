@@ -8,11 +8,11 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 {
     public class VersusComputerGameMode : AbstractGameMode
     {
-        private readonly Random _random;
+        private readonly IBot _bot;
 
         public VersusComputerGameMode() : base(2)
         {
-            _random = new Random();
+            _bot = new SimpleBot();
         }
 
         public override void StartMainCycle()
@@ -40,7 +40,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 
         private void MakeBotTurn()
 {
-            var turn = (TurnMenuOptions)_random.Next(1, 3);
+            var turn = _bot.RequestTurn(_gameField, _currentPlayerId);
             switch (turn)
             {
                 case TurnMenuOptions.Move:
@@ -55,26 +55,14 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
         protected new void MakeMove()
         {
             var possibleMoves = _turnService.GetPossibleMoves(_currentPlayerId);
-            int randomIndex = _random.Next(possibleMoves.Count);
-            _turnService.TryMove(possibleMoves[randomIndex], _currentPlayerId);
+            var randomMoveDirection = _bot.RequestMoveDirection(possibleMoves);
+            _turnService.TryMove(randomMoveDirection, _currentPlayerId);
             _consoleView.SetFieldChanged();
         }
 
         protected new void SetWall()
         {
-            int randomRow;
-            int randomColumn;
-            WallType randomWallType;
-            Wall randomWall;
-            do
-            {
-                randomRow = _random.Next(0, 8);
-                randomColumn = _random.Next(0, 8);
-
-                randomWallType = _random.NextDouble() >= 0.5 ? WallType.Horizontal : WallType.Vertical;
-                randomWall = new Wall(randomWallType, new WallCenter(randomRow, randomColumn));
-            } while (!_turnService.TrySetWall(randomWall, _currentPlayerId));
-
+            _bot.SetRandomWall(_turnService, _currentPlayerId);
             _consoleView.SetFieldChanged();
         }
     }
