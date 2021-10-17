@@ -10,29 +10,29 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Abstract;
 
 public abstract class AbstractGameMode : IGameMode
 {
-    protected readonly ITurnService _turnService;
-    protected readonly ConsoleView _consoleView;
-    protected readonly IGameField _gameField;
+    protected readonly ITurnService TurnService;
+    protected readonly ConsoleView ConsoleView;
+    protected readonly IGameField GameField;
 
-    protected int _currentPlayerId = 1;
-    protected bool _isGameEnded;
+    protected int CurrentPlayerId = 1;
+    protected bool IsGameEnded;
 
     protected AbstractGameMode(int playersCount)
     {
-        _gameField = new GameField(playersCount);
-        _consoleView = new ConsoleView(_gameField);
-        _turnService = new TurnService(_gameField, new WavePathFinder(), OnPlayerReachedFinish);
+        GameField = new GameField(playersCount);
+        ConsoleView = new ConsoleView(GameField);
+        TurnService = new TurnService(GameField, new WavePathFinder(), OnPlayerReachedFinish);
 
-        InitializeWithView(_consoleView);
+        InitializeWithView(ConsoleView);
     }
 
-    protected void OnPlayerReachedFinish(int playerId)
+    private void OnPlayerReachedFinish(int playerId)
     {
-        _consoleView.SetFieldChanged();
-        _isGameEnded = true;
-        _consoleView.Clear();
-        _consoleView.WriteLine($"Player with ID {playerId} won!\nPress any key...");
-        _consoleView.Redraw();
+        ConsoleView.SetFieldChanged();
+        IsGameEnded = true;
+        ConsoleView.Clear();
+        ConsoleView.WriteLine($"Player with ID {playerId} won!\nPress any key...");
+        ConsoleView.Redraw();
         Console.ReadKey();
     }
 
@@ -54,16 +54,16 @@ public abstract class AbstractGameMode : IGameMode
 
     protected void MakeMove()
     {
-        var possibleMoves = _turnService.GetPossibleMoves(_currentPlayerId);
+        var possibleMoves = TurnService.GetPossibleMoves(CurrentPlayerId);
         var direction = RequestMoveDirection(possibleMoves);
-        _turnService.TryMove(direction, _currentPlayerId);
-        _consoleView.SetFieldChanged();
+        TurnService.TryMove(direction, CurrentPlayerId);
+        ConsoleView.SetFieldChanged();
     }
 
     protected void SetWall()
     {
         var wall = RequestWall();
-        _turnService.TrySetWall(wall, _currentPlayerId);
-        _consoleView.SetFieldChanged();
+        TurnService.TrySetWall(wall, CurrentPlayerId);
+        ConsoleView.SetFieldChanged();
     }
 }

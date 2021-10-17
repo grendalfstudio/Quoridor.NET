@@ -13,14 +13,14 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 
         public override void StartMainCycle()
         {
-            while (!_isGameEnded)
+            while (!IsGameEnded)
             {
-                _consoleView.CurrentPlayerId = _currentPlayerId;
-                _consoleView.SetFieldChanged();
-                _consoleView.Redraw();
+                ConsoleView.CurrentPlayerId = CurrentPlayerId;
+                ConsoleView.SetFieldChanged();
+                ConsoleView.Redraw();
                 
                 MakePlayerTurn();
-                _consoleView.Redraw();
+                ConsoleView.Redraw();
                 
                 GetNextPlayer();
             }
@@ -28,10 +28,10 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
         
         private void GetNextPlayer()
         {
-            if (_currentPlayerId == _numberOfPlayers)
-                _currentPlayerId = 1;
+            if (CurrentPlayerId == _numberOfPlayers)
+                CurrentPlayerId = 1;
             else
-                ++_currentPlayerId;
+                ++CurrentPlayerId;
         }
     }
 }

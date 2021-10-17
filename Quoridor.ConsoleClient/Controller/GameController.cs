@@ -27,6 +27,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
                         PrintHelp();
                         break;
                     case MainMenuOptions.Exit:
+                        Console.WriteLine("Exiting...");
                         return;
                     default:
                         throw new ArgumentOutOfRangeException();

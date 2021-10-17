@@ -19,30 +19,30 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 
         public override void StartMainCycle()
         {
-            while (!_isGameEnded)
+            while (!IsGameEnded)
             {
-                _consoleView.CurrentPlayerId = _currentPlayerId;
-                _consoleView.SetFieldChanged();
-                _consoleView.Redraw();
+                ConsoleView.CurrentPlayerId = CurrentPlayerId;
+                ConsoleView.SetFieldChanged();
+                ConsoleView.Redraw();
                 
-                if (_currentPlayerId is 1)
+                if (CurrentPlayerId is 1)
                 {
                     MakePlayerTurn();
-                    _currentPlayerId = 2;
+                    CurrentPlayerId = 2;
                 }
                 else
                 {
                     MakeBotTurn();
-                    _currentPlayerId = 1;
+                    CurrentPlayerId = 1;
                 }
                 
-                _consoleView.Redraw();
+                ConsoleView.Redraw();
             }
         }
 
         private void MakeBotTurn()
 {
-            var turn = _bot.RequestTurn(_gameField, _currentPlayerId);
+            var turn = _bot.RequestTurn(GameField, CurrentPlayerId);
             switch (turn)
             {
                 case TurnType.Move:
@@ -56,16 +56,16 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 
         protected new void MakeMove()
         {
-            var possibleMoves = _turnService.GetPossibleMoves(_currentPlayerId);
+            var possibleMoves = TurnService.GetPossibleMoves(CurrentPlayerId);
             var randomMoveDirection = _bot.RequestMoveDirection(possibleMoves);
-            _turnService.TryMove(randomMoveDirection, _currentPlayerId);
-            _consoleView.SetFieldChanged();
+            TurnService.TryMove(randomMoveDirection, CurrentPlayerId);
+            ConsoleView.SetFieldChanged();
         }
 
         protected new void SetWall()
         {
-            _bot.SetRandomWall(_turnService, _currentPlayerId);
-            _consoleView.SetFieldChanged();
+            _bot.SetRandomWall(TurnService, CurrentPlayerId);
+            ConsoleView.SetFieldChanged();
         }
     }
 }
