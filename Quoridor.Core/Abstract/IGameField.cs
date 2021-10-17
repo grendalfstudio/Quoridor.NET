@@ -1,11 +1,12 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using HavocAndCry.Quoridor.Core.Models;
 
 namespace HavocAndCry.Quoridor.Core.Abstract
 {
-    public interface IGameField
+    public interface IGameField : ICloneable
     {
         int Size { get; }
         IReadOnlyList<Wall> Walls { get; }

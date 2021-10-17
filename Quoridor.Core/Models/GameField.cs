@@ -38,5 +38,15 @@ namespace HavocAndCry.Quoridor.Core.Models
         {
             return _walls.Any(w => w.WallCenter.Equals(wallCenter) && w.Type == wallType);
         }
+
+        public object Clone()
+        {
+            var clone = new GameField(_players.Count);
+            foreach (var wall in Walls)
+            {
+                clone.AddWall(wall);
+            }
+            return clone;
+        }
     }
 }

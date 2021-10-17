@@ -152,7 +152,10 @@ namespace HavocAndCry.Quoridor.Model.Validators
                 return false;
             }
 
-            if (gameField.Players.Any(p => !pathFinder.IsPathToFinishExists(p, gameField)))
+            IGameField futureGameField = (IGameField)gameField.Clone();
+            futureGameField.AddWall(newWall);
+
+            if (futureGameField.Players.Any(p => !pathFinder.IsPathToFinishExists(p, futureGameField)))
             {
                 return false;
             }
