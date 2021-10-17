@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using HavocAndCry.Quoridor.ConsoleClient.Models;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
@@ -40,30 +41,60 @@ public abstract class AbstractGameMode : IGameMode
 
     protected void MakePlayerTurn()
     {
-        var turn = RequestTurnMenuOption();
-        switch (turn)
+        if (GameField.Players.First(p => p.PlayerId == CurrentPlayerId).WallsCount > 0)
         {
-            case TurnType.Move:
-                MakeMove();
-                break;
-            case TurnType.SetWall:
-                SetWall();
-                break;
+            var turn = RequestTurnMenuOption();
+            switch (turn)
+            {
+                case TurnType.Move:
+                    MakeMove();
+                    break;
+                case TurnType.SetWall:
+                    SetWall();
+                    break;
+            }
+        }
+        else
+        {
+            MakeMove();
         }
     }
 
     protected void MakeMove()
     {
-        var possibleMoves = TurnService.GetPossibleMoves(CurrentPlayerId);
-        var direction = RequestMoveDirection(possibleMoves);
-        TurnService.TryMove(direction, CurrentPlayerId);
-        ConsoleView.SetFieldChanged();
+        var success = false;
+        while(!success){
+            var possibleMoves = TurnService.GetPossibleMoves(CurrentPlayerId);
+            var direction = RequestMoveDirection(possibleMoves);
+            if (!TurnService.TryMove(direction, CurrentPlayerId))
+            {
+                ConsoleView.WriteLine("Can't make this move, select another");
+                ConsoleView.Redraw();
+            }
+            else
+            {
+                success = true;
+                ConsoleView.SetFieldChanged();
+            }
+        }
     }
 
     protected void SetWall()
     {
-        var wall = RequestWall();
-        TurnService.TrySetWall(wall, CurrentPlayerId);
-        ConsoleView.SetFieldChanged();
+        var success = false;
+        while(!success){
+            var wall = RequestWall();
+            if (!TurnService.TrySetWall(wall, CurrentPlayerId))
+            {
+                ConsoleView.WriteLine("Can't place wall here, select another place\nPress any key...");
+                ConsoleView.Redraw();
+                Console.ReadKey();
+            }
+            else
+            {
+                success = true;
+                ConsoleView.SetFieldChanged();
+            }
+        }
     }
 }

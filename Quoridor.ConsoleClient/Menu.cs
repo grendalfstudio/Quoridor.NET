@@ -111,7 +111,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient
                     center = new WallCenter(coordsInt[0]-1, coordsInt[1]-1);
                     break;
                 }
-                catch (Exception _)
+                catch (Exception)
                 {
                     _consoleView.WriteLine("Invalid input, try again");
                     _consoleView.Redraw();
@@ -149,6 +149,7 @@ namespace HavocAndCry.Quoridor.ConsoleClient
             Console.Clear();
             Console.WriteLine("\tHelp\n");
             Console.WriteLine("If you have any questions, feel free to contact @andrry_armor via Telegram\n");
+            Console.WriteLine("To end game at any time, you can press Ctrl+C");
             Console.WriteLine("Press any key to return to menu");
             Console.ReadKey();
         }
