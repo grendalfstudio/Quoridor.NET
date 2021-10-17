@@ -26,6 +26,7 @@ namespace HavocAndCry.Quoridor.Model.Services
         {
             var player = _gameField.Players.First(p => p.PlayerId == playerId);
             var coordinates = GetCoordinateFromDirection(direction, player);
+            coordinates = UpdateCoordinatesIfJump(coordinates, player);
             
             if (!TurnValidator.IsMoveValid(_gameField, coordinates.Item1, coordinates.Item2, player))
                 return false;
@@ -49,9 +50,10 @@ namespace HavocAndCry.Quoridor.Model.Services
         {
             List<MoveDirection> directions = new List<MoveDirection>();
             var player = _gameField.Players.First(p => p.PlayerId == playerId);
-            for (int i = 0; i < 8; i++)
+            for (int i = 1; i <= 8; i++)
             {
                 var coordinates = GetCoordinateFromDirection((MoveDirection)i, player);
+                coordinates = UpdateCoordinatesIfJump(coordinates, player);
                 if (TurnValidator.IsMoveValid(_gameField, coordinates.Item1, coordinates.Item2, player))
                 {
                     directions.Add((MoveDirection)i);
@@ -76,11 +78,11 @@ namespace HavocAndCry.Quoridor.Model.Services
             switch (direction)
             {
                 case MoveDirection.Up:
-                    row = player.Row + 1;
+                    row = player.Row - 1;
                     column = player.Column;
                     break;
                 case MoveDirection.Down:
-                    row = player.Row - 1;
+                    row = player.Row + 1;
                     column = player.Column;
                     break;
                 case MoveDirection.Left:
@@ -92,25 +94,37 @@ namespace HavocAndCry.Quoridor.Model.Services
                     column = player.Column + 1;
                     break;
                 case MoveDirection.UpLeft:
-                    row = player.Row + 1;
+                    row = player.Row - 1;
                     column = player.Column - 1;
                     break;
                 case MoveDirection.UpRight:
-                    row = player.Row + 1;
+                    row = player.Row - 1;
                     column = player.Column + 1;
                     break;
                 case MoveDirection.DownLeft:
-                    row = player.Row - 1;
+                    row = player.Row + 1;
                     column = player.Column - 1;
                     break;
                 case MoveDirection.DownRight:
-                    row = player.Row - 1;
+                    row = player.Row + 1;
                     column = player.Column + 1;
                     break;
                 default:
                     break;
             }
             return new Tuple<int, int>(row, column);
+        }
+
+        private Tuple<int, int> UpdateCoordinatesIfJump(Tuple<int, int> coordinates, Player player)
+        {
+            if (_gameField.Players.Any(p => p.Row == coordinates.Item1 && p.Column == coordinates.Item2))
+            {
+                var newRow = player.Row - (player.Row - coordinates.Item1) * 2;
+                var newColumn = player.Column - (player.Column - coordinates.Item2) * 2;
+                coordinates = new Tuple<int, int>(newRow, newColumn);
+            }
+
+            return coordinates;
         }
     }
 }
