@@ -12,6 +12,16 @@ namespace HavocAndCry.Quoridor.Core.Models
             FinishRow = finishRow;
             WallsCount = 10;
         }
+
+        public Player(Player other)
+        {
+            PlayerId = other.PlayerId;
+            Row = other.Row;
+            Column = other.Column;
+            FinishRow = other.FinishRow;
+            WallsCount = other.WallsCount;   
+        }
+        
         public int PlayerId { get; }
         public int Row { get; private set; }
         public int Column { get; private set; }
