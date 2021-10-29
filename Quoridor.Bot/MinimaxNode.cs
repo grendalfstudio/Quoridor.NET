@@ -10,18 +10,18 @@ namespace Quoridor.Bot
     {
         private readonly List<MinimaxNode> _children;
 
-        public MinimaxNode(MinimaxNode parent, string moveRepresentation)
+        public MinimaxNode(MinimaxNode parent, Move move)
         {
             Parent = parent;
-            MoveRepresentation = moveRepresentation;
+            Move = move;
             _children = new List<MinimaxNode>();
         }
 
         public MinimaxNode Parent { get; }
         public IReadOnlyList<MinimaxNode> Children => _children;
-        public string MoveRepresentation { get; }
+        public Move Move { get; }
 
-        public void AddChildrenNodes(List<string> moves)
+        public void AddChildrenNodes(List<Move> moves)
         {
             var childNodes = moves.Select(move => new MinimaxNode(this, move));
             _children.AddRange(childNodes);

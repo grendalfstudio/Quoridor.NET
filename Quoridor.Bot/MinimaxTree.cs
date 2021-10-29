@@ -8,6 +8,6 @@ namespace Quoridor.Bot
 {
     public class MinimaxTree : MinimaxNode
     {
-        public MinimaxTree() : base(null, "") { }
+        public MinimaxTree() : base(null, null) { }
     }
 }
