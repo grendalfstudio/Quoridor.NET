@@ -1,5 +1,6 @@
 ﻿using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
+using HavocAndCry.Quoridor.Model.Services;
 using Quoridor.Bot.Abstract;
 
 namespace Quoridor.Bot
@@ -13,21 +14,33 @@ namespace Quoridor.Bot
             _random = new Random();
         }
 
-        public MoveDirection RequestMoveDirection(List<MoveDirection> possibleDirections)
+        public void MakeMove(ITurnService turnService, int playerId)
         {
-            int randomIndex = _random.Next(possibleDirections.Count);
-            return possibleDirections[randomIndex];
-        }
-
-        public TurnType RequestTurn(IGameField gameField, int playerId)
-        {
-            Player currentPlayer = gameField.Players.Where(p => p.PlayerId == playerId).First();
-            return currentPlayer.WallsCount > 0
+            Player currentPlayer = turnService.Players.Where(p => p.PlayerId == playerId).First();
+            TurnType turnType = currentPlayer.WallsCount > 0
                 ? (TurnType)_random.Next(1, 3)
                 : TurnType.Move;
+
+            switch (turnType)
+            {
+                case TurnType.Move:
+                    MakeRandomPawnMove(turnService, playerId);
+                    break;
+                case TurnType.SetWall:
+                    SetRandomWall(turnService, playerId);
+                    break;
+            }
         }
 
-        public void SetRandomWall(ITurnService turnService, int playerId)
+        private void MakeRandomPawnMove(ITurnService turnService, int playerId)
+        {
+            List<MoveDirection> possibleMoves = turnService.GetPossibleMoves(playerId);
+            int randomIndex = _random.Next(possibleMoves.Count);
+            var randomMoveDirection = possibleMoves[randomIndex];
+            turnService.TryMove(randomMoveDirection, playerId);
+        }
+
+        private void SetRandomWall(ITurnService turnService, int playerId)
         {
             int randomRow;
             int randomColumn;

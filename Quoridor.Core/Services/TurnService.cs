@@ -19,9 +19,11 @@ namespace HavocAndCry.Quoridor.Model.Services
             _pathFinder = pathFinder;
             OnPlayerReachedFinish = onPlayerReachedFinish;
         }
-        
+
         public event Action<int> OnPlayerReachedFinish;
-        
+
+        public IReadOnlyList<Player> Players => _gameField.Players;
+
         public bool TryMove(MoveDirection direction, int playerId)
         {
             var player = _gameField.Players.First(p => p.PlayerId == playerId);

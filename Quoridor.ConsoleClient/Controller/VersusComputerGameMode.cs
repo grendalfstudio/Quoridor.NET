@@ -41,30 +41,8 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
         }
 
         private void MakeBotTurn()
-{
-            var turn = _bot.RequestTurn(GameField, CurrentPlayerId);
-            switch (turn)
-            {
-                case TurnType.Move:
-                    MakeMove();
-                    break;
-                case TurnType.SetWall:
-                    SetWall();
-                    break;
-            }
-        }
-
-        protected new void MakeMove()
         {
-            var possibleMoves = TurnService.GetPossibleMoves(CurrentPlayerId);
-            var randomMoveDirection = _bot.RequestMoveDirection(possibleMoves);
-            TurnService.TryMove(randomMoveDirection, CurrentPlayerId);
-            ConsoleView.SetFieldChanged();
-        }
-
-        protected new void SetWall()
-        {
-            _bot.SetRandomWall(TurnService, CurrentPlayerId);
+            _bot.MakeMove(TurnService, CurrentPlayerId);
             ConsoleView.SetFieldChanged();
         }
     }
