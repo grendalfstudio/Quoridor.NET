@@ -38,5 +38,10 @@ namespace HavocAndCry.Quoridor.Core.Models
         {
             --WallsCount;
         }
+
+        public void RemoveWall()
+        {
+            ++WallsCount;
+        }
     }
 }

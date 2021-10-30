@@ -29,6 +29,11 @@ namespace HavocAndCry.Quoridor.Core.Models
             _walls.Add(wall);
         }
 
+        public void RemoveWall(Wall wall)
+        {
+            _walls.Remove(wall);
+        }
+
         public bool IsWallAt(WallCenter wallCenter)
         {
             return _walls.Any(w => w.WallCenter.Equals(wallCenter));

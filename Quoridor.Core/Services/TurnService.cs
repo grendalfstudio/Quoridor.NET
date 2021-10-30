@@ -12,6 +12,7 @@ namespace HavocAndCry.Quoridor.Model.Services
     {
         private readonly IGameField _gameField;
         private readonly IPathFinder _pathFinder;
+        private Stack<Move> _movesHistory = new Stack<Move>();
 
         public TurnService(IGameField gameField, IPathFinder pathFinder, Action<int> onPlayerReachedFinish)
         {
@@ -23,6 +24,8 @@ namespace HavocAndCry.Quoridor.Model.Services
         public event Action<int> OnPlayerReachedFinish;
 
         public IReadOnlyList<Player> Players => _gameField.Players;
+
+        public IReadOnlyList<Wall> Walls => _gameField.Walls;
 
         public bool TryMove(MoveDirection direction, int playerId)
         {
@@ -46,6 +49,56 @@ namespace HavocAndCry.Quoridor.Model.Services
             _gameField.AddWall(wall);
             _gameField.Players[playerId-1].SetWall();
             return true;
+        }
+
+        public void MakeMove(Move move)
+        {
+            if (move == null)
+            {
+                Console.WriteLine("Move is null.\n Press any key ...");
+                Console.ReadKey();
+                return;
+            }
+
+            switch (move.TurnType)
+            {
+                case TurnType.Move:
+                    Player player = _gameField.Players.First(p => p.PlayerId == move.PlayerId);
+                    var coordinates = GetCoordinateFromDirection(move.MoveDirection, player);
+                    coordinates = UpdateCoordinatesIfJump(coordinates, player);
+
+                    player.MovePlayer(coordinates.Item1, coordinates.Item2);
+                    break;
+                case TurnType.SetWall:
+                    _gameField.AddWall(move.Wall);
+                    _gameField.Players[move.PlayerId - 1].SetWall();
+                    break;
+            }
+
+            _movesHistory.Push(move);
+        }
+
+        public void UndoLastMove()
+        {
+            if (!_movesHistory.Any()) return;
+
+            Move lastMove = _movesHistory.Pop();
+            switch (lastMove.TurnType)
+            {
+                case TurnType.Move:
+                    var player = _gameField.Players.First(p => p.PlayerId == lastMove.PlayerId);
+                    player.MovePlayer(lastMove.PlayerRow, lastMove.PlayerColumn);
+                    break;
+                case TurnType.SetWall:
+                    _gameField.RemoveWall(lastMove.Wall);
+                    _gameField.Players[lastMove.PlayerId - 1].RemoveWall();
+                    break;
+            }
+        }
+
+        public bool IsWallValid(Wall wall, int playerId)
+        {
+            return TurnValidator.IsWallValid(_gameField, wall, playerId, _pathFinder);
         }
 
         public List<MoveDirection> GetPossibleMoves(int playerId)
@@ -127,6 +180,15 @@ namespace HavocAndCry.Quoridor.Model.Services
             }
 
             return coordinates;
+        }
+
+        public int EvaluatePosition(int playerId)
+        {
+            Player currentPlayer = _gameField.Players.First(p => p.PlayerId == playerId);
+            Player oppositePlayer = _gameField.Players.First(p => p.PlayerId == playerId % 2 + 1);
+            int currentPlayerDistance = _pathFinder.DistanseToFinish(currentPlayer, _gameField);
+            int oppositePlayerDistance = _pathFinder.DistanseToFinish(oppositePlayer, _gameField);
+            return oppositePlayerDistance - currentPlayerDistance;
         }
     }
 }

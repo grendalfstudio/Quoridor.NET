@@ -12,9 +12,9 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
     {
         private readonly IBot _bot;
 
-        public VersusComputerGameMode() : base(2)
+        public VersusComputerGameMode(IBot bot) : base(2)
         {
-            _bot = new SimpleBot();
+            _bot = bot;
         }
 
         public override void StartMainCycle()
