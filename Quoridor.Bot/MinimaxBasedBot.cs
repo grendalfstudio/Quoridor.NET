@@ -3,6 +3,7 @@ using Quoridor.Bot.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,18 +14,20 @@ namespace Quoridor.Bot
 {
     public class MinimaxBasedBot : IBot
     {
-        private const int MaxDepth = 1;
+        private const int MaxDepth = 2;
 
         public void MakeMove(ITurnService turnService, int playerId)
         {
+            var timer = new Stopwatch();
+            timer.Start();
             int bestScore = int.MinValue;
             Move bestMove = null;
-            Console.WriteLine("\n\nMove scores:\n");
+            //Console.WriteLine("\n\nMove scores:\n");
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
                 turnService.MakeMove(possibleMove);
                 int score = -Minimax(MaxDepth - 1, playerId % 2 + 1);
-                Console.Write(" " + score);
+                //Console.Write(" " + score);
                 if (score > bestScore)
                 {
                     bestScore = score;
@@ -32,8 +35,8 @@ namespace Quoridor.Bot
                 }
                 turnService.UndoLastMove();
             }
-            Console.WriteLine("\n Press any key...");
-            Console.ReadKey();
+            //Console.WriteLine("\n Press any key...");
+            //Console.ReadKey();
 
             if (bestMove == null)
             {
@@ -50,6 +53,10 @@ namespace Quoridor.Bot
                     turnService.TrySetWall(bestMove.Wall, bestMove.PlayerId);
                     break;
             }
+
+            var time = timer.ElapsedMilliseconds;
+            Console.WriteLine($"time for move: {time} ms");
+            Console.ReadKey();
 
             int Minimax(int depth, int playerId)
             {

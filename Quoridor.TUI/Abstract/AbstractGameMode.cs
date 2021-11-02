@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using HavocAndCry.Quoridor.ConsoleClient.Models;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using HavocAndCry.Quoridor.Core.Pathfinding;
 using HavocAndCry.Quoridor.Model.Services;
-using static HavocAndCry.Quoridor.ConsoleClient.Menu;
+using HavocAndCry.Quoridor.TUI.Models;
+using static HavocAndCry.Quoridor.TUI.Menu;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Abstract;
+namespace HavocAndCry.Quoridor.TUI.Abstract;
 
 public abstract class AbstractGameMode : IGameMode
 {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.ConsoleClient", "Quoridor.ConsoleClient\Quoridor.ConsoleClient.csproj", "{42D26675-A231-4B79-95A8-E47C02EADC03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.TUI", "Quoridor.TUI\Quoridor.TUI.csproj", "{42D26675-A231-4B79-95A8-E47C02EADC03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.Core", "Quoridor.Core\Quoridor.Core.csproj", "{63527915-F5BD-4F98-8A6D-8388BC3C0EE1}"
 EndProject
