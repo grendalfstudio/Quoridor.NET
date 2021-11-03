@@ -1,12 +1,4 @@
-﻿using HavocAndCry.Quoridor.Core.Abstract;
-using HavocAndCry.Quoridor.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HavocAndCry.Quoridor.Model
+﻿namespace HavocAndCry.Quoridor.Core.Models
 {
     public class Move
     {
@@ -17,6 +9,10 @@ namespace HavocAndCry.Quoridor.Model
             MoveDirection = moveDirection;
             PlayerRow = player.Row;
             PlayerColumn = player.Column;
+
+            var (row, col) = moveDirection.ToCoordinates(player);
+            Row = row;
+            Column = col;
         }
 
         public Move(Player player, Wall wall)
@@ -32,5 +28,7 @@ namespace HavocAndCry.Quoridor.Model
         public Wall Wall { get; }
         public int PlayerRow { get; }
         public int PlayerColumn { get; }
+        public int Row { get; set; }
+        public int Column { get; set; }
     }
 }

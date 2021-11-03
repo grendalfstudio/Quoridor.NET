@@ -5,6 +5,6 @@ namespace Quoridor.Bot.Abstract
 {
     public interface IBot
     {
-        void MakeMove(ITurnService turnService, int playerId);
+        Move MakeMove(ITurnService turnService, int playerId);
     }
 }
