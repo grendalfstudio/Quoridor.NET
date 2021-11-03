@@ -1,4 +1,4 @@
-﻿namespace HavocAndCry.Quoridor.CLI.Models;
+﻿namespace HavocAndCry.Quoridor.AiTestClient.Models;
 
 public enum PlayerColor
 {

@@ -1,9 +1,9 @@
 ﻿using HavocAndCry.Quoridor.Core.Abstract;
-using Quoridor.Bot.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using System.Diagnostics;
+using HavocAndCry.Quoridor.Bot.Abstract;
 
-namespace Quoridor.Bot
+namespace HavocAndCry.Quoridor.Bot
 {
     public class MinimaxBasedBot : IBot
     {

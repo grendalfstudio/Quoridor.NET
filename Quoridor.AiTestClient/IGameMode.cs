@@ -1,4 +1,4 @@
-﻿namespace HavocAndCry.Quoridor.CLI
+﻿namespace HavocAndCry.Quoridor.AiTestClient
 {
     public interface IGameMode
     {

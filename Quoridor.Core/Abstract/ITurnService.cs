@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using HavocAndCry.Quoridor.Core.Models;
-using HavocAndCry.Quoridor.Model;
 
 namespace HavocAndCry.Quoridor.Core.Abstract
 {

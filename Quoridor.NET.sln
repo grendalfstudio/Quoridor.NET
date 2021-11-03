@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.TUI", "Quoridor.TU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quoridor.Core", "Quoridor.Core\Quoridor.Core.csproj", "{63527915-F5BD-4F98-8A6D-8388BC3C0EE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quoridor.Bot", "Quoridor.Bot\Quoridor.Bot.csproj", "{F1622F3F-9B41-4CD7-82DA-D9AEB9AB5208}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HavocAndCry.Quoridor.Bot", "HavocAndCry.Quoridor.Bot\HavocAndCry.Quoridor.Bot.csproj", "{F1622F3F-9B41-4CD7-82DA-D9AEB9AB5208}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quoridor.CLI", "Quoridor.CLI\Quoridor.CLI.csproj", "{F1371B80-8F0A-4DF7-B557-C149F6A84964}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quoridor.AiTestClient", "Quoridor.AiTestClient\Quoridor.AiTestClient.csproj", "{F1371B80-8F0A-4DF7-B557-C149F6A84964}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,10 +30,10 @@ Global
 		{F1622F3F-9B41-4CD7-82DA-D9AEB9AB5208}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1622F3F-9B41-4CD7-82DA-D9AEB9AB5208}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F1371B80-8F0A-4DF7-B557-C149F6A84964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-    {F1371B80-8F0A-4DF7-B557-C149F6A84964}.Debug|Any CPU.Build.0 = Debug|Any CPU
-    {F1371B80-8F0A-4DF7-B557-C149F6A84964}.Release|Any CPU.ActiveCfg = Release|Any CPU
-    {F1371B80-8F0A-4DF7-B557-C149F6A84964}.Release|Any CPU.Build.0 = Release|Any CPU
-                                                                                    		
+				{F1371B80-8F0A-4DF7-B557-C149F6A84964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+				{F1371B80-8F0A-4DF7-B557-C149F6A84964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+				{F1371B80-8F0A-4DF7-B557-C149F6A84964}.Release|Any CPU.Build.0 = Release|Any CPU
+																																																																																						
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

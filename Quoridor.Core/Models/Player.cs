@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HavocAndCry.Quoridor.Core.Models
+﻿namespace HavocAndCry.Quoridor.Core.Models
 {
     public class Player
     {

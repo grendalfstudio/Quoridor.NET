@@ -1,7 +1,7 @@
 ﻿using System;
 using HavocAndCry.Quoridor.TUI.Abstract;
 using HavocAndCry.Quoridor.TUI.Models;
-using Quoridor.Bot;
+using HavocAndCry.Quoridor.Bot;
 using static HavocAndCry.Quoridor.TUI.Menu;
 
 namespace HavocAndCry.Quoridor.TUI.Controller

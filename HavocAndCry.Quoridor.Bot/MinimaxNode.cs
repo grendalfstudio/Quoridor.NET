@@ -1,12 +1,6 @@
-﻿using HavocAndCry.Quoridor.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HavocAndCry.Quoridor.Core.Models;
+﻿using HavocAndCry.Quoridor.Core.Models;
 
-namespace Quoridor.Bot
+namespace HavocAndCry.Quoridor.Bot
 {
     public class MinimaxNode
     {

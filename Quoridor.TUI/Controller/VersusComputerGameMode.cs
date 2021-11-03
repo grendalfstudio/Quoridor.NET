@@ -1,5 +1,5 @@
 ﻿using HavocAndCry.Quoridor.TUI.Abstract;
-using Quoridor.Bot.Abstract;
+using HavocAndCry.Quoridor.Bot.Abstract;
 
 namespace HavocAndCry.Quoridor.TUI.Controller
 {

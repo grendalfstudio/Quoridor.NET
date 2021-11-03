@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using HavocAndCry.Quoridor.CLI.Models;
+using HavocAndCry.Quoridor.AiTestClient.Models;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 
-namespace HavocAndCry.Quoridor.CLI;
+namespace HavocAndCry.Quoridor.AiTestClient;
 
 public static class ConsoleHelper
 {
@@ -20,7 +20,7 @@ public static class ConsoleHelper
         return selectedColor;
     }
 
-    public static Move GetMove(PlayerColor color, IGameField gameField)
+    public static Move GetTurn(PlayerColor color, IGameField gameField)
     {
         var input = Console.ReadLine();
         return ParseInput(input!, color, gameField);
@@ -121,7 +121,7 @@ public static class ConsoleHelper
         var rowChar = (char)(row + '1');
         var colChar = (char)(col + startLetter);
 
-        return $"{rowChar}{colChar}";
+        return $"{colChar}{rowChar}";
     }
 
     private static Wall ParseWall(string position)

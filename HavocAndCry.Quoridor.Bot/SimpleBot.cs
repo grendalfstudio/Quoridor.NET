@@ -1,8 +1,8 @@
-﻿using HavocAndCry.Quoridor.Core.Abstract;
+﻿using HavocAndCry.Quoridor.Bot.Abstract;
+using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
-using Quoridor.Bot.Abstract;
 
-namespace Quoridor.Bot
+namespace HavocAndCry.Quoridor.Bot
 {
     public class SimpleBot : IBot
     {
@@ -13,9 +13,9 @@ namespace Quoridor.Bot
             _random = new Random();
         }
 
-        public void MakeMove(ITurnService turnService, int playerId)
+        public Move MakeMove(ITurnService turnService, int playerId)
         {
-            Player currentPlayer = turnService.Players.Where(p => p.PlayerId == playerId).First();
+            Player currentPlayer = turnService.Players.First(p => p.PlayerId == playerId);
             TurnType turnType = currentPlayer.WallsCount > 0
                 ? (TurnType)_random.Next(1, 3)
                 : TurnType.Move;
@@ -29,6 +29,8 @@ namespace Quoridor.Bot
                     SetRandomWall(turnService, playerId);
                     break;
             }
+            //TODO: refactor to return real move (or delete this bot completely, why not)
+            return null;
         }
 
         private void MakeRandomPawnMove(ITurnService turnService, int playerId)
@@ -41,16 +43,13 @@ namespace Quoridor.Bot
 
         private void SetRandomWall(ITurnService turnService, int playerId)
         {
-            int randomRow;
-            int randomColumn;
-            WallType randomWallType;
             Wall randomWall;
             do
             {
-                randomRow = _random.Next(0, 8);
-                randomColumn = _random.Next(0, 8);
+                var randomRow = _random.Next(0, 8);
+                var randomColumn = _random.Next(0, 8);
 
-                randomWallType = _random.NextDouble() >= 0.5 ? WallType.Horizontal : WallType.Vertical;
+                var randomWallType = _random.NextDouble() >= 0.5 ? WallType.Horizontal : WallType.Vertical;
                 randomWall = new Wall(randomWallType, new WallCenter(randomRow, randomColumn));
             } while (!turnService.TrySetWall(randomWall, playerId));
         }

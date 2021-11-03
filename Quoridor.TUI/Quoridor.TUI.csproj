@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Quoridor.Bot\Quoridor.Bot.csproj" />
+      <ProjectReference Include="..\HavocAndCry.Quoridor.Bot\HavocAndCry.Quoridor.Bot.csproj" />
       <ProjectReference Include="..\Quoridor.Core\Quoridor.Core.csproj" />
     </ItemGroup>
 
