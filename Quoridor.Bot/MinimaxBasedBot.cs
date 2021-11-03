@@ -61,6 +61,8 @@ namespace Quoridor.Bot
                 int bestScore = int.MinValue;
                 foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
                 {
+                    if (bestScore == int.MaxValue)
+                        break;
                     turnService.MakeMove(possibleMove);
                     bestScore = Math.Max(bestScore, -Minimax(depth - 1, playerId % 2 + 1));
                     turnService.UndoLastMove();

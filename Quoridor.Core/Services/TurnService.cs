@@ -37,7 +37,10 @@ namespace HavocAndCry.Quoridor.Model.Services
                 return false;
 
             player.MovePlayer(coordinates.Item1, coordinates.Item2);
-            CheckWinCondition(player);
+            
+            if (CheckWinCondition(player))
+                OnPlayerReachedFinish?.Invoke(player.PlayerId);
+            
             return true;
         }
 
@@ -118,12 +121,14 @@ namespace HavocAndCry.Quoridor.Model.Services
             return directions;
         }
 
-        private void CheckWinCondition(Player player)
+        private bool CheckWinCondition(Player player)
         {
             if (player.Row == player.FinishRow)
             {
-                OnPlayerReachedFinish?.Invoke(player.PlayerId);
+                return true;
             }
+
+            return false;
         }
 
         private Tuple<int, int> GetCoordinateFromDirection(MoveDirection direction, Player player)
@@ -186,6 +191,12 @@ namespace HavocAndCry.Quoridor.Model.Services
         {
             Player currentPlayer = _gameField.Players.First(p => p.PlayerId == playerId);
             Player oppositePlayer = _gameField.Players.First(p => p.PlayerId == playerId % 2 + 1);
+            
+            if (CheckWinCondition(currentPlayer))
+                return int.MaxValue;
+            if (CheckWinCondition(oppositePlayer))
+                return int.MinValue;
+            
             int currentPlayerDistance = _pathFinder.DistanseToFinish(currentPlayer, _gameField);
             int oppositePlayerDistance = _pathFinder.DistanseToFinish(oppositePlayer, _gameField);
             return oppositePlayerDistance - currentPlayerDistance;
