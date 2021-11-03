@@ -27,7 +27,7 @@ namespace HavocAndCry.Quoridor.Core.Services
 
         public IReadOnlyList<Wall> Walls => _gameField.Walls;
 
-        public bool TryMove(MoveDirection direction, int playerId)
+        public bool TryMove(MoveDirection direction, int playerId, bool isRealMove = true)
         {
             var player = _gameField.Players.First(p => p.PlayerId == playerId);
             var coordinates = direction.ToCoordinates(player);
@@ -38,7 +38,7 @@ namespace HavocAndCry.Quoridor.Core.Services
 
             player.MovePlayer(coordinates.Item1, coordinates.Item2);
             
-            if (CheckWinCondition(player))
+            if (isRealMove && CheckWinCondition(player))
                 OnPlayerReachedFinish?.Invoke(player.PlayerId);
             
             return true;
@@ -54,31 +54,31 @@ namespace HavocAndCry.Quoridor.Core.Services
             return true;
         }
 
-        public void MakeMove(Move move)
+        public bool MakeMove(Move move, bool isRealMove = true)
         {
             if (move == null)
             {
                 Console.WriteLine("Move is null.\n Press any key ...");
                 Console.ReadKey();
-                return;
+                return false;
             }
 
+            bool moveSucceeded = false;
             switch (move.TurnType)
             {
                 case TurnType.Move:
-                    Player player = _gameField.Players.First(p => p.PlayerId == move.PlayerId);
-                    var coordinates = move.MoveDirection.ToCoordinates(player);
-                    coordinates = UpdateCoordinatesIfJump(coordinates, player);
-
-                    player.MovePlayer(coordinates.Item1, coordinates.Item2);
+                    moveSucceeded = TryMove(move.MoveDirection, move.PlayerId, isRealMove);
                     break;
                 case TurnType.SetWall:
-                    _gameField.AddWall(move.Wall);
-                    _gameField.Players[move.PlayerId - 1].SetWall();
+                    moveSucceeded = TrySetWall(move.Wall, move.PlayerId);
                     break;
             }
+            
+            if (!moveSucceeded)
+                return false;
 
             _movesHistory.Push(move);
+            return true;
         }
 
         public void UndoLastMove()

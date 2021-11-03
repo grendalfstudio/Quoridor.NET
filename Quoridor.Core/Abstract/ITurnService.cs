@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using HavocAndCry.Quoridor.Core.Models;
-using HavocAndCry.Quoridor.Model;
 
 namespace HavocAndCry.Quoridor.Core.Abstract
 {
@@ -10,9 +9,9 @@ namespace HavocAndCry.Quoridor.Core.Abstract
         event Action<int> OnPlayerReachedFinish;
         IReadOnlyList<Player> Players { get; }
         IReadOnlyList<Wall> Walls { get; }
-        bool TryMove(MoveDirection direction, int playerId);
+        bool TryMove(MoveDirection direction, int playerId, bool isRealMove = true);
         bool TrySetWall(Wall wall, int playerId);
-        void MakeMove(Move move);
+        bool MakeMove(Move move, bool isRealMove = true);
         void UndoLastMove();
         bool IsWallValid(Wall wall, int playerId);
         int EvaluatePosition(int playerId);

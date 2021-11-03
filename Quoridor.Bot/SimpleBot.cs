@@ -13,9 +13,9 @@ namespace Quoridor.Bot
             _random = new Random();
         }
 
-        public void MakeMove(ITurnService turnService, int playerId)
+        public Move MakeMove(ITurnService turnService, int playerId)
         {
-            Player currentPlayer = turnService.Players.Where(p => p.PlayerId == playerId).First();
+            Player currentPlayer = turnService.Players.First(p => p.PlayerId == playerId);
             TurnType turnType = currentPlayer.WallsCount > 0
                 ? (TurnType)_random.Next(1, 3)
                 : TurnType.Move;
@@ -23,23 +23,26 @@ namespace Quoridor.Bot
             switch (turnType)
             {
                 case TurnType.Move:
-                    MakeRandomPawnMove(turnService, playerId);
+                    return MakeRandomPawnMove(turnService, playerId);
                     break;
                 case TurnType.SetWall:
-                    SetRandomWall(turnService, playerId);
+                    return SetRandomWall(turnService, playerId);
                     break;
+                default:
+                    return null;
             }
         }
 
-        private void MakeRandomPawnMove(ITurnService turnService, int playerId)
+        private Move MakeRandomPawnMove(ITurnService turnService, int playerId)
         {
             List<MoveDirection> possibleMoves = turnService.GetPossibleMoves(playerId);
             int randomIndex = _random.Next(possibleMoves.Count);
             var randomMoveDirection = possibleMoves[randomIndex];
             turnService.TryMove(randomMoveDirection, playerId);
+            return new Move(turnService.Players.First(p => p.PlayerId == playerId), randomMoveDirection);
         }
 
-        private void SetRandomWall(ITurnService turnService, int playerId)
+        private Move SetRandomWall(ITurnService turnService, int playerId)
         {
             int randomRow;
             int randomColumn;
@@ -53,6 +56,7 @@ namespace Quoridor.Bot
                 randomWallType = _random.NextDouble() >= 0.5 ? WallType.Horizontal : WallType.Vertical;
                 randomWall = new Wall(randomWallType, new WallCenter(randomRow, randomColumn));
             } while (!turnService.TrySetWall(randomWall, playerId));
+            return new Move(turnService.Players.First(p => p.PlayerId == playerId), randomWall);
         }
     }
 }
