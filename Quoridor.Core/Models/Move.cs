@@ -2,17 +2,13 @@
 {
     public class Move
     {
-        public Move(Player player, MoveDirection moveDirection)
+        public Move(Player player, Position position)
         {
             PlayerId = player.PlayerId;
             TurnType = TurnType.Move;
-            MoveDirection = moveDirection;
             PlayerRow = player.Row;
             PlayerColumn = player.Column;
-
-            var (row, col) = moveDirection.ToCoordinates(player);
-            Row = row;
-            Column = col;
+            Position = position;
         }
 
         public Move(Player player, Wall wall)
@@ -28,6 +24,8 @@
         public Wall Wall { get; }
         public int PlayerRow { get; }
         public int PlayerColumn { get; }
+        
+        public Position Position { get; set; }
         public int Row { get; set; }
         public int Column { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿using HavocAndCry.Quoridor.Core.Models;
+using HavocAndCry.Quoridor.Core.Models;
 
 namespace HavocAndCry.Quoridor.Bot
 {
