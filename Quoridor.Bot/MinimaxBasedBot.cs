@@ -8,6 +8,7 @@ namespace Quoridor.Bot
     public class MinimaxBasedBot : IBot
     {
         private const int MaxDepth = 2;
+        private const int MaxWallsRange = 3;
 
         public Move MakeMove(ITurnService turnService, int playerId)
         {
@@ -72,17 +73,28 @@ namespace Quoridor.Bot
             List<Move> possibleMoves = new List<Move>();
             possibleMoves.AddRange(turnService.GetPossibleMoves(playerId)
                 .Select(moveDirection => new Move(currentPlayer, moveDirection)));
-            possibleMoves.AddRange(GetPossibleWallsToSet(turnService, playerId)
+            possibleMoves.AddRange(GetPossibleWallsToSetInRange(turnService, playerId)
                 .Select(wall => new Move(currentPlayer, wall)));
             return possibleMoves;
         }
-
-        private IEnumerable<Wall> GetPossibleWallsToSet(ITurnService turnService, int playerId)
+        
+        private IEnumerable<Wall> GetPossibleWallsToSetInRange(ITurnService turnService, int playerId)
         {
             List<Wall> possibleWallsToSet = new List<Wall>();
-            for (int i = 0; i < 8; i++)
+            Player currentPlayer = turnService.Players.First(p => p.PlayerId == playerId);
+
+            var rowMinValue = (currentPlayer.Row - MaxWallsRange) >= 0 
+                ? (currentPlayer.Row - MaxWallsRange) : 0;
+            var rowMaxValue = (currentPlayer.Row + MaxWallsRange) <= 7 
+                ? (currentPlayer.Row + MaxWallsRange) : 7;
+            var columnMinValue = (currentPlayer.Column - MaxWallsRange) >= 0 
+                ? (currentPlayer.Column - MaxWallsRange) : 0;
+            var columnMaxValue = (currentPlayer.Column + MaxWallsRange) >= 7 
+                ? (currentPlayer.Column + MaxWallsRange) : 7;
+
+            for (int i = rowMinValue; i <= rowMaxValue; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = columnMinValue; j <= rowMaxValue; j++)
                 {
                     Wall horizontalWall = new Wall(WallType.Horizontal, new WallCenter(i, j));
                     Wall verticalWall = new Wall(WallType.Vertical, new WallCenter(i, j));
