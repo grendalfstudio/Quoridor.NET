@@ -3,7 +3,7 @@ using System.Linq;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using HavocAndCry.Quoridor.Core.Pathfinding;
-using HavocAndCry.Quoridor.Model.Services;
+using HavocAndCry.Quoridor.Core.Services;
 using HavocAndCry.Quoridor.TUI.Models;
 using static HavocAndCry.Quoridor.TUI.Menu;
 

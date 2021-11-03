@@ -1,14 +1,7 @@
 ﻿using HavocAndCry.Quoridor.Core.Abstract;
 using Quoridor.Bot.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HavocAndCry.Quoridor.Model;
-using System.Xml.Linq;
 
 namespace Quoridor.Bot
 {
@@ -16,18 +9,16 @@ namespace Quoridor.Bot
     {
         private const int MaxDepth = 2;
 
-        public void MakeMove(ITurnService turnService, int playerId)
+        public Move MakeMove(ITurnService turnService, int playerId)
         {
             var timer = new Stopwatch();
             timer.Start();
             int bestScore = int.MinValue;
             Move bestMove = null;
-            //Console.WriteLine("\n\nMove scores:\n");
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
                 turnService.MakeMove(possibleMove);
-                int score = -Minimax(MaxDepth - 1, playerId % 2 + 1);
-                //Console.Write(" " + score);
+                int score = -Minimax(turnService, MaxDepth - 1, playerId % 2 + 1);
                 if (score > bestScore)
                 {
                     bestScore = score;
@@ -35,14 +26,12 @@ namespace Quoridor.Bot
                 }
                 turnService.UndoLastMove();
             }
-            //Console.WriteLine("\n Press any key...");
-            //Console.ReadKey();
 
             if (bestMove == null)
             {
                 Console.WriteLine("BestMove is null.\n Press any key ...");
                 Console.ReadKey();
-                return;
+                return null;
             }
             switch (bestMove.TurnType)
             {
@@ -54,29 +43,7 @@ namespace Quoridor.Bot
                     break;
             }
 
-            var time = timer.ElapsedMilliseconds;
-            Console.WriteLine($"time for move: {time} ms");
-            Console.ReadKey();
-
-            int Minimax(int depth, int playerId)
-            {
-                if (depth <= 0)
-                {
-                    return turnService.EvaluatePosition(playerId);
-                }
-
-                int bestScore = int.MinValue;
-                foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
-                {
-                    if (bestScore == int.MaxValue)
-                        break;
-                    turnService.MakeMove(possibleMove);
-                    bestScore = Math.Max(bestScore, -Minimax(depth - 1, playerId % 2 + 1));
-                    turnService.UndoLastMove();
-                }
-
-                return bestScore;
-            }
+            return bestMove;
         }
 
         private IEnumerable<Move> GetPossibleMoves(ITurnService turnService, int playerId)
@@ -89,6 +56,26 @@ namespace Quoridor.Bot
             possibleMoves.AddRange(GetPosssibleWallsToSet(turnService, playerId)
                 .Select(wall => new Move(currentPlayer, wall)));
             return possibleMoves;
+        }
+
+        private int Minimax(ITurnService turnService, int depth, int playerId)
+        {
+            if (depth <= 0)
+            {
+                return turnService.EvaluatePosition(playerId);
+            }
+
+            int bestScore = int.MinValue;
+            foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
+            {
+                if (bestScore == int.MaxValue)
+                    break;
+                turnService.MakeMove(possibleMove);
+                bestScore = Math.Max(bestScore, -Minimax(turnService, depth - 1, playerId % 2 + 1));
+                turnService.UndoLastMove();
+            }
+
+            return bestScore;
         }
 
         private IEnumerable<Wall> GetPosssibleWallsToSet(ITurnService turnService, int playerId)

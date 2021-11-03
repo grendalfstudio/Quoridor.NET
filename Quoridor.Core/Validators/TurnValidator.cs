@@ -1,10 +1,9 @@
-﻿using System.Data;
-using System.Linq;
+﻿using System.Linq;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using HavocAndCry.Quoridor.Core.Pathfinding;
 
-namespace HavocAndCry.Quoridor.Model.Validators
+namespace HavocAndCry.Quoridor.Core.Validators
 {
     public static class TurnValidator
     {

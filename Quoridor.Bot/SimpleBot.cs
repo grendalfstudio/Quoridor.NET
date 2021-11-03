@@ -1,6 +1,5 @@
 ﻿using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
-using HavocAndCry.Quoridor.Model.Services;
 using Quoridor.Bot.Abstract;
 
 namespace Quoridor.Bot
