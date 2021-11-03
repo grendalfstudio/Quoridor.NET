@@ -27,16 +27,14 @@ namespace HavocAndCry.Quoridor.Core.Services
 
         public IReadOnlyList<Wall> Walls => _gameField.Walls;
 
-        public bool TryMove(MoveDirection direction, int playerId, bool isRealMove = true)
+        public bool TryMove(Position position, int playerId, bool isRealMove = true)
         {
             var player = _gameField.Players.First(p => p.PlayerId == playerId);
-            var coordinates = direction.ToCoordinates(player);
-            coordinates = UpdateCoordinatesIfJump(coordinates, player);
             
-            if (!TurnValidator.IsMoveValid(_gameField, coordinates.Item1, coordinates.Item2, player))
+            if (!TurnValidator.IsMoveValid(_gameField, position.Row, position.Column, player))
                 return false;
 
-            player.MovePlayer(coordinates.Item1, coordinates.Item2);
+            player.MovePlayer(position.Row, position.Column);
             
             if (isRealMove && CheckWinCondition(player))
                 OnPlayerReachedFinish?.Invoke(player.PlayerId);
@@ -54,20 +52,20 @@ namespace HavocAndCry.Quoridor.Core.Services
             return true;
         }
 
-        public bool MakeMove(Move move, bool isRealMove = true)
+        public Move MakeMove(Move move, bool isRealMove = true)
         {
             if (move == null)
             {
                 Console.WriteLine("Move is null.\n Press any key ...");
                 Console.ReadKey();
-                return false;
+                return null;
             }
 
             bool moveSucceeded = false;
             switch (move.TurnType)
             {
                 case TurnType.Move:
-                    moveSucceeded = TryMove(move.MoveDirection, move.PlayerId, isRealMove);
+                    moveSucceeded = TryMove(move.Position, move.PlayerId, isRealMove);
                     break;
                 case TurnType.SetWall:
                     moveSucceeded = TrySetWall(move.Wall, move.PlayerId);
@@ -75,10 +73,10 @@ namespace HavocAndCry.Quoridor.Core.Services
             }
             
             if (!moveSucceeded)
-                return false;
+                return null;
 
             _movesHistory.Push(move);
-            return true;
+            return move;
         }
 
         public void UndoLastMove()
@@ -104,9 +102,9 @@ namespace HavocAndCry.Quoridor.Core.Services
             return TurnValidator.IsWallValid(_gameField, wall, playerId, _pathFinder);
         }
 
-        public List<MoveDirection> GetPossibleMoves(int playerId)
+        public List<Position> GetPossibleMoves(int playerId)
         {
-            List<MoveDirection> directions = new List<MoveDirection>();
+            List<Position> directions = new List<Position>();
             var player = _gameField.Players.First(p => p.PlayerId == playerId);
             for (int i = 1; i <= 8; i++)
             {
@@ -114,7 +112,7 @@ namespace HavocAndCry.Quoridor.Core.Services
                 coordinates = UpdateCoordinatesIfJump(coordinates, player);
                 if (TurnValidator.IsMoveValid(_gameField, coordinates.Item1, coordinates.Item2, player))
                 {
-                    directions.Add((MoveDirection)i);
+                    directions.Add(new Position(coordinates.Item1, coordinates.Item2));
                 }
             }
 

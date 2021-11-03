@@ -36,14 +36,12 @@ namespace Quoridor.Bot
             }
 
             var moveSucceeded = turnService.MakeMove(bestMove);
-            if (!moveSucceeded)
-                return null;
             
             var time = timer.ElapsedMilliseconds;
             Console.WriteLine($"time for move: {time} ms");
             Console.ReadKey();
 
-            return bestMove;
+            return moveSucceeded;
         }
         
         private int Minimax(ITurnService turnService, int depth, int playerId)
@@ -72,7 +70,7 @@ namespace Quoridor.Bot
 
             List<Move> possibleMoves = new List<Move>();
             possibleMoves.AddRange(turnService.GetPossibleMoves(playerId)
-                .Select(moveDirection => new Move(currentPlayer, moveDirection)));
+                .Select(movePosition => new Move(currentPlayer, movePosition)));
             possibleMoves.AddRange(GetPossibleWallsToSetInRange(turnService, playerId)
                 .Select(wall => new Move(currentPlayer, wall)));
             return possibleMoves;
