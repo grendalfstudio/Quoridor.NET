@@ -1,12 +1,10 @@
 ﻿using System;
-using HavocAndCry.Quoridor.ConsoleClient.Abstract;
-using HavocAndCry.Quoridor.ConsoleClient.Models;
-using HavocAndCry.Quoridor.Core.Abstract;
-using HavocAndCry.Quoridor.Model.Services;
+using HavocAndCry.Quoridor.TUI.Abstract;
+using HavocAndCry.Quoridor.TUI.Models;
 using Quoridor.Bot;
-using static HavocAndCry.Quoridor.ConsoleClient.Menu;
+using static HavocAndCry.Quoridor.TUI.Menu;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Controller
+namespace HavocAndCry.Quoridor.TUI.Controller
 {
     public class GameController
     {

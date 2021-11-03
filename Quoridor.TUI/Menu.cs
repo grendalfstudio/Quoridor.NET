@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using HavocAndCry.Quoridor.ConsoleClient.Models;
 using HavocAndCry.Quoridor.Core.Models;
+using HavocAndCry.Quoridor.TUI.Models;
 
-namespace HavocAndCry.Quoridor.ConsoleClient
+namespace HavocAndCry.Quoridor.TUI
 {
     public static class Menu
     {

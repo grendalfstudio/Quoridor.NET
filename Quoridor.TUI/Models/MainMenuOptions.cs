@@ -1,4 +1,4 @@
-﻿namespace HavocAndCry.Quoridor.ConsoleClient.Models
+﻿namespace HavocAndCry.Quoridor.TUI.Models
 {
     public enum MainMenuOptions
     {

@@ -1,12 +1,7 @@
-﻿using HavocAndCry.Quoridor.ConsoleClient.Abstract;
-using HavocAndCry.Quoridor.ConsoleClient.Models;
-using HavocAndCry.Quoridor.Core.Models;
-using HavocAndCry.Quoridor.Model.Services;
-using System;
-using Quoridor.Bot;
+﻿using HavocAndCry.Quoridor.TUI.Abstract;
 using Quoridor.Bot.Abstract;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Controller
+namespace HavocAndCry.Quoridor.TUI.Controller
 {
     public class VersusComputerGameMode : AbstractGameMode
     {
