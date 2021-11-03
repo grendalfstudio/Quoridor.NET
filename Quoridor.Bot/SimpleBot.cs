@@ -24,10 +24,8 @@ namespace Quoridor.Bot
             {
                 case TurnType.Move:
                     return MakeRandomPawnMove(turnService, playerId);
-                    break;
                 case TurnType.SetWall:
                     return SetRandomWall(turnService, playerId);
-                    break;
                 default:
                     return null;
             }
@@ -35,11 +33,16 @@ namespace Quoridor.Bot
 
         private Move MakeRandomPawnMove(ITurnService turnService, int playerId)
         {
-            List<MoveDirection> possibleMoves = turnService.GetPossibleMoves(playerId);
+            List<Position> possibleMoves = turnService.GetPossibleMoves(playerId);
             int randomIndex = _random.Next(possibleMoves.Count);
             var randomMoveDirection = possibleMoves[randomIndex];
-            turnService.TryMove(randomMoveDirection, playerId);
-            return new Move(turnService.Players.First(p => p.PlayerId == playerId), randomMoveDirection);
+            
+            var move = new Move(turnService.Players.First(p => p.PlayerId == playerId), randomMoveDirection);
+            var moveSucceeded = turnService.MakeMove(move);
+            
+            if (!moveSucceeded)
+                return null;
+            return move;
         }
 
         private Move SetRandomWall(ITurnService turnService, int playerId)
