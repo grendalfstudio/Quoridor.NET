@@ -16,16 +16,26 @@ namespace HavocAndCry.Quoridor.Bot
             timer.Start();
             int bestScore = int.MinValue;
             Move bestMove = null;
+            int alphaCoef = int.MaxValue;
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
                 turnService.MakeMove(possibleMove, false);
-                int score = -Minimax(turnService, MaxDepth - 1, playerId % 2 + 1);
+                int score = -Minimax(turnService, MaxDepth - 1, playerId % 2 + 1, -alphaCoef);
                 if (score > bestScore)
                 {
                     bestScore = score;
                     bestMove = possibleMove;
                 }
+                
                 turnService.UndoLastMove();
+
+                if (bestScore > alphaCoef)
+                {
+                    break;
+                }
+                
+                alphaCoef = bestScore;
+                
             }
 
             if (bestMove == null)
@@ -42,21 +52,30 @@ namespace HavocAndCry.Quoridor.Bot
             return bestMove;
         }
         
-        private int Minimax(ITurnService turnService, int depth, int playerId)
+        private int Minimax(ITurnService turnService, int depth, int playerId, int alphaCoef)
         {
+            //Console.WriteLine("Huy");
             if (depth <= 0)
             {
                 return turnService.EvaluatePosition(playerId);
             }
 
             int bestScore = int.MinValue;
+            int betaCoef = int.MaxValue;
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
                 if (bestScore == int.MaxValue)
                     return bestScore;
                 turnService.MakeMove(possibleMove, false);
-                bestScore = Math.Max(bestScore, -Minimax(turnService,depth - 1, playerId % 2 + 1));
+                bestScore = Math.Max(bestScore, -Minimax(turnService,depth - 1, playerId % 2 + 1, -betaCoef));
                 turnService.UndoLastMove();
+
+                if (bestScore > alphaCoef || bestScore > betaCoef)
+                {
+                    break;
+                }
+
+                betaCoef = bestScore;
             }
 
             return bestScore;
