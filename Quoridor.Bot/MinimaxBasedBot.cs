@@ -13,18 +13,16 @@ namespace Quoridor.Bot
 {
     public class MinimaxBasedBot : IBot
     {
-        private const int MaxDepth = 1;
+        private const int MaxDepth = 2;
 
         public void MakeMove(ITurnService turnService, int playerId)
         {
             int bestScore = int.MinValue;
             Move bestMove = null;
-            Console.WriteLine("\n\nMove scores:\n");
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
                 turnService.MakeMove(possibleMove);
                 int score = -Minimax(MaxDepth - 1, playerId % 2 + 1);
-                Console.Write(" " + score);
                 if (score > bestScore)
                 {
                     bestScore = score;
@@ -32,13 +30,9 @@ namespace Quoridor.Bot
                 }
                 turnService.UndoLastMove();
             }
-            Console.WriteLine("\n Press any key...");
-            Console.ReadKey();
 
             if (bestMove == null)
             {
-                Console.WriteLine("BestMove is null.\n Press any key ...");
-                Console.ReadKey();
                 return;
             }
             switch (bestMove.TurnType)
