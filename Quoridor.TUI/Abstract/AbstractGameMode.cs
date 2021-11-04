@@ -22,7 +22,7 @@ public abstract class AbstractGameMode : IGameMode
     {
         GameField = new GameField(playersCount);
         ConsoleView = new ConsoleView(GameField);
-        TurnService = new TurnService(GameField, new WavePathFinder(), OnPlayerReachedFinish);
+        TurnService = new TurnService(GameField, new AStarPathFinder(), OnPlayerReachedFinish);
 
         InitializeWithView(ConsoleView);
     }
