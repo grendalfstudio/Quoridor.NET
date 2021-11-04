@@ -16,7 +16,7 @@ namespace HavocAndCry.Quoridor.Bot
             timer.Start();
             int bestScore = int.MinValue;
             Move bestMove = null;
-            int alphaCoef = int.MaxValue;
+            int alphaCoef = int.MinValue;
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
                 turnService.MakeMove(possibleMove, false);
@@ -31,11 +31,8 @@ namespace HavocAndCry.Quoridor.Bot
 
                 if (bestScore > alphaCoef)
                 {
-                    break;
+                    alphaCoef = bestScore;
                 }
-                
-                alphaCoef = bestScore;
-                
             }
 
             if (bestMove == null)
@@ -61,7 +58,7 @@ namespace HavocAndCry.Quoridor.Bot
             }
 
             int bestScore = int.MinValue;
-            int betaCoef = int.MaxValue;
+            int betaCoef = int.MinValue;
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
                 if (bestScore == int.MaxValue)
@@ -70,12 +67,15 @@ namespace HavocAndCry.Quoridor.Bot
                 bestScore = Math.Max(bestScore, -Minimax(turnService,depth - 1, playerId % 2 + 1, -betaCoef));
                 turnService.UndoLastMove();
 
-                if (bestScore > alphaCoef || bestScore > betaCoef)
+                if (bestScore > alphaCoef)
                 {
                     break;
                 }
 
-                betaCoef = bestScore;
+                if (bestScore > betaCoef)
+                {
+                    betaCoef = bestScore;
+                }
             }
 
             return bestScore;
