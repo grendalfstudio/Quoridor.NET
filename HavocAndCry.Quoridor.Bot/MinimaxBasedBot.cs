@@ -38,8 +38,8 @@ namespace HavocAndCry.Quoridor.Bot
             var moveSucceeded = turnService.MakeMove(bestMove);
             
             var time = timer.ElapsedMilliseconds;
-            Console.WriteLine($"time for move: {time} ms");
-            Console.ReadKey();
+            //Console.WriteLine($"time for move: {time} ms");
+            //Console.ReadKey();
 
             return moveSucceeded;
         }

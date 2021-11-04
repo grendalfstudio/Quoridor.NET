@@ -42,18 +42,40 @@ public static class ConsoleHelper
     private static void WriteMoveCommand(Move move)
     {
         var builder = new StringBuilder();
-        builder.Append((int)move.MoveDirection is >= 1 and <= 4 ? "move " : "jump ");
+        builder.Append(GetMoveType(move)).Append(' ');
 
-        var code = ConvertPosition(move.Row, move.Column, 'a');
+        var code = ConvertPosition(move.Position.Row, move.Position.Column, 'a');
         builder.Append(code);
         Console.WriteLine(builder.ToString());
+    }
+
+    private static string GetMoveType(Move move)
+    {
+        var (row, column) = move.Position;
+        var (playerRow, playerCol) = new Position(move.PlayerRow, move.PlayerColumn);
+        if (row == playerRow && column != playerCol)
+        {
+            return Math.Abs(column - playerCol) > 1 ? "jump" : "move";
+        }
+
+        if (column == playerCol && row != playerRow)
+        {
+            return Math.Abs(row - playerRow) > 1 ? "jump" : "move";
+        }
+
+        if (row != playerRow && column != playerCol)
+        {
+            return "jump";
+        }
+
+        return "move";
     }
 
     private static void WriteWallCommand(Move move)
     {
         var builder = new StringBuilder();
         builder.Append("wall ");
-        var code = ConvertPosition(move.Row, move.Column, 's');
+        var code = ConvertPosition(move.Wall.WallCenter.NorthRow, move.Wall.WallCenter.WestColumn, 's');
         builder.Append(code);
         switch (move.Wall.Type)
         {
@@ -75,8 +97,8 @@ public static class ConsoleHelper
         switch (words[0])
         {
             case "move" or "jump":
-                var direction = ParseMoveDirection(words[1], player);
-                return new Move(player, direction);
+                var desiredPosition = ParseMoveDirection(words[1], player);
+                return new Move(player, desiredPosition);
             case "wall":
                 var wall = ParseWall(words[1]);
                 return new Move(player, wall);
@@ -85,22 +107,11 @@ public static class ConsoleHelper
         }
     }
 
-    private static MoveDirection ParseMoveDirection(string position, Player player)
+    private static Position ParseMoveDirection(string position, Player player)
     {
-        var convertedPosition = ParsePosition(position, 'a');
+        var (row, column) = ParsePosition(position, 'a');
 
-        return convertedPosition switch
-        {
-            (int, int) t when t.Item1 == player.Row && t.Item2 > player.Column => MoveDirection.Right,
-            (int, int) t when t.Item1 == player.Row && t.Item2 < player.Column => MoveDirection.Left,
-            (int, int) t when t.Item1 > player.Row && t.Item2 == player.Column => MoveDirection.Down,
-            (int, int) t when t.Item1 < player.Row && t.Item2 == player.Column => MoveDirection.Up,
-            (int, int) t when t.Item1 < player.Row && t.Item2 < player.Column => MoveDirection.UpLeft,
-            (int, int) t when t.Item1 < player.Row && t.Item2 > player.Column => MoveDirection.UpRight,
-            (int, int) t when t.Item1 > player.Row && t.Item2 < player.Column => MoveDirection.DownLeft,
-            (int, int) t when t.Item1 > player.Row && t.Item2 > player.Column => MoveDirection.DownRight,
-        };
-
+        return new Position(row, column);
     }
 
     private static (int, int) ParsePosition(string pos, char startLetter)

@@ -24,20 +24,17 @@ namespace HavocAndCry.Quoridor.Bot
             {
                 case TurnType.Move:
                     return MakeRandomPawnMove(turnService, playerId);
-                    break;
                 case TurnType.SetWall:
                     return SetRandomWall(turnService, playerId);
-                    break;
                 default:
                     return null;
             }
             //TODO: refactor to return real move (or delete this bot completely, why not)
-            return null;
         }
 
         private Move MakeRandomPawnMove(ITurnService turnService, int playerId)
         {
-            List<MoveDirection> possibleMoves = turnService.GetPossibleMoves(playerId);
+            var possibleMoves = turnService.GetPossibleMoves(playerId);
             int randomIndex = _random.Next(possibleMoves.Count);
             var randomMoveDirection = possibleMoves[randomIndex];
             turnService.TryMove(randomMoveDirection, playerId);
