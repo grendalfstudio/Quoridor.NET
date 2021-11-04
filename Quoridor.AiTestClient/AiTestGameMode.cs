@@ -1,4 +1,6 @@
-﻿using HavocAndCry.Quoridor.AiTestClient.Models;
+﻿using System.Text;
+using System.Text.Json;
+using HavocAndCry.Quoridor.AiTestClient.Models;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using HavocAndCry.Quoridor.Core.Pathfinding;
@@ -58,12 +60,26 @@ namespace HavocAndCry.Quoridor.AiTestClient
 
         private void MakeMove(Move turn)
         {
-            _turnService.TryMove(turn.MoveDirection, turn.PlayerId);
+            if(!_turnService.TryMove(turn.Position, turn.PlayerId))
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"[{DateTime.Now}] Can't move to {turn.Position}");
+                var field = JsonSerializer.Serialize(_gameField);
+                sb.AppendLine(field);
+                File.AppendAllText(@"./log.txt", sb.ToString());
+            }
         }
 
         private void SetWall(Move turn)
         {
-            _turnService.TrySetWall(turn.Wall, turn.PlayerId);
+            if(!_turnService.TrySetWall(turn.Wall, turn.PlayerId))
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"[{DateTime.Now}] Can't place wall at {turn.Wall.WallCenter}");
+                var field = JsonSerializer.Serialize(_gameField);
+                sb.AppendLine(field);
+                File.AppendAllText(@"./log.txt", sb.ToString());
+            }
         }
 
         private void MakeBotTurn()
