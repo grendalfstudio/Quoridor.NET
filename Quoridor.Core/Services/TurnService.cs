@@ -52,13 +52,11 @@ namespace HavocAndCry.Quoridor.Core.Services
             return true;
         }
 
-        public Move MakeMove(Move move, bool isRealMove = true)
+        public bool MakeMove(Move move, bool isRealMove = true)
         {
             if (move == null)
             {
-                Console.WriteLine("Move is null.\n Press any key ...");
-                Console.ReadKey();
-                return null;
+                return false;
             }
 
             bool moveSucceeded = false;
@@ -72,11 +70,10 @@ namespace HavocAndCry.Quoridor.Core.Services
                     break;
             }
             
-            if (!moveSucceeded)
-                return null;
-
-            _movesHistory.Push(move);
-            return move;
+            if (moveSucceeded)
+                _movesHistory.Push(move);
+            
+            return moveSucceeded;
         }
 
         public void UndoLastMove()

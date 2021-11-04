@@ -37,8 +37,13 @@ namespace HavocAndCry.Quoridor.Bot
             var possibleMoves = turnService.GetPossibleMoves(playerId);
             int randomIndex = _random.Next(possibleMoves.Count);
             var randomMoveDirection = possibleMoves[randomIndex];
-            turnService.TryMove(randomMoveDirection, playerId);
-            return new Move(turnService.Players.First(p => p.PlayerId == playerId), randomMoveDirection);
+            
+            var move = new Move(turnService.Players.First(p => p.PlayerId == playerId), randomMoveDirection);
+            var moveSucceeded = turnService.MakeMove(move);
+            
+            if (!moveSucceeded)
+                return null;
+            return move;
         }
 
         private Move SetRandomWall(ITurnService turnService, int playerId)

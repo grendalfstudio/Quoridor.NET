@@ -30,8 +30,6 @@ namespace HavocAndCry.Quoridor.Bot
 
             if (bestMove == null)
             {
-                //Console.WriteLine("BestMove is null.\n Press any key ...");
-                //Console.ReadKey();
                 return null;
             }
 
@@ -41,7 +39,7 @@ namespace HavocAndCry.Quoridor.Bot
             //Console.WriteLine($"time for move: {time} ms");
             //Console.ReadKey();
 
-            return moveSucceeded;
+            return bestMove;
         }
         
         private int Minimax(ITurnService turnService, int depth, int playerId)
