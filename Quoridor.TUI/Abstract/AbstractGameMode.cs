@@ -65,7 +65,7 @@ public abstract class AbstractGameMode : IGameMode
         var success = false;
         while(!success){
             var possibleMoves = TurnService.GetPossibleMoves(CurrentPlayerId);
-            var direction = RequestMoveDirection(possibleMoves);
+            var direction = RequestMovePosition(possibleMoves);
             if (!TurnService.TryMove(direction, CurrentPlayerId))
             {
                 ConsoleView.WriteLine("Can't make this move, select another");
