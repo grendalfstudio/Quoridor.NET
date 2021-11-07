@@ -12,6 +12,7 @@ namespace HavocAndCry.Quoridor.Core.Abstract
         IReadOnlyList<Wall> Walls { get; }
         IReadOnlyList<Player> Players { get; }
         void AddWall(Wall wall);
+        void RemoveWall(Wall wall);
         bool IsWallAt(WallCenter wallCenter);
         bool IsWallAt(WallCenter wallCenter, WallType wallType);
     }

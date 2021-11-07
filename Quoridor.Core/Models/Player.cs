@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HavocAndCry.Quoridor.Core.Models
+﻿namespace HavocAndCry.Quoridor.Core.Models
 {
     public class Player
     {
@@ -37,6 +35,11 @@ namespace HavocAndCry.Quoridor.Core.Models
         public void SetWall()
         {
             --WallsCount;
+        }
+
+        public void RemoveWall()
+        {
+            ++WallsCount;
         }
     }
 }

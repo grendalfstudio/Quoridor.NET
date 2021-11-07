@@ -1,4 +1,4 @@
-﻿namespace HavocAndCry.Quoridor.ConsoleClient.Abstract
+﻿namespace HavocAndCry.Quoridor.TUI.Abstract
 {
     public interface IGameMode
     {

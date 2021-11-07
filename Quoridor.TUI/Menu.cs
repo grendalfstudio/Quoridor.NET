@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using HavocAndCry.Quoridor.ConsoleClient.Models;
+using System.Linq;
 using HavocAndCry.Quoridor.Core.Models;
+using HavocAndCry.Quoridor.TUI.Models;
 
-namespace HavocAndCry.Quoridor.ConsoleClient
+namespace HavocAndCry.Quoridor.TUI
 {
     public static class Menu
     {
@@ -121,13 +122,16 @@ namespace HavocAndCry.Quoridor.ConsoleClient
             return new Wall(orientation, center);
         }
 
-        public static MoveDirection RequestMoveDirection(IList<MoveDirection> possibleMoves)
+        public static Position RequestMovePosition(IList<Position> possibleMoves)
         {
             _consoleView.Clear();
-            _consoleView.WriteLine("\tChoose move direction:");
-            for (int i = 1; i <= possibleMoves.Count; i++)
+            _consoleView.WriteLine("\tChoose move coordinates:");
+
+            var possibleMoveViewPositions =
+                possibleMoves.Select(p => p with { Row = p.Row + 1, Column = p.Column + 1 }).ToList();
+            for (int i = 1; i <= possibleMoveViewPositions.Count; i++)
             {
-                _consoleView.WriteLine($"\t{i} - {possibleMoves[i-1].ToString()}");
+                _consoleView.WriteLine($"\t{i} - {possibleMoveViewPositions[i-1]}");
             }
             _consoleView.Redraw();
 

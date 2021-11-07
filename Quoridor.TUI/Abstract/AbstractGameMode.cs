@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using HavocAndCry.Quoridor.ConsoleClient.Models;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using HavocAndCry.Quoridor.Core.Pathfinding;
-using HavocAndCry.Quoridor.Model.Services;
-using static HavocAndCry.Quoridor.ConsoleClient.Menu;
+using HavocAndCry.Quoridor.Core.Services;
+using HavocAndCry.Quoridor.TUI.Models;
+using static HavocAndCry.Quoridor.TUI.Menu;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Abstract;
+namespace HavocAndCry.Quoridor.TUI.Abstract;
 
 public abstract class AbstractGameMode : IGameMode
 {
@@ -22,7 +22,7 @@ public abstract class AbstractGameMode : IGameMode
     {
         GameField = new GameField(playersCount);
         ConsoleView = new ConsoleView(GameField);
-        TurnService = new TurnService(GameField, new WavePathFinder(), OnPlayerReachedFinish);
+        TurnService = new TurnService(GameField, new AStarPathFinder(), OnPlayerReachedFinish);
 
         InitializeWithView(ConsoleView);
     }
@@ -65,7 +65,7 @@ public abstract class AbstractGameMode : IGameMode
         var success = false;
         while(!success){
             var possibleMoves = TurnService.GetPossibleMoves(CurrentPlayerId);
-            var direction = RequestMoveDirection(possibleMoves);
+            var direction = RequestMovePosition(possibleMoves);
             if (!TurnService.TryMove(direction, CurrentPlayerId))
             {
                 ConsoleView.WriteLine("Can't make this move, select another");

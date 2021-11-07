@@ -1,11 +1,10 @@
 ﻿using System;
-using HavocAndCry.Quoridor.ConsoleClient.Abstract;
-using HavocAndCry.Quoridor.ConsoleClient.Models;
-using HavocAndCry.Quoridor.Core.Abstract;
-using HavocAndCry.Quoridor.Model.Services;
-using static HavocAndCry.Quoridor.ConsoleClient.Menu;
+using HavocAndCry.Quoridor.TUI.Abstract;
+using HavocAndCry.Quoridor.TUI.Models;
+using HavocAndCry.Quoridor.Bot;
+using static HavocAndCry.Quoridor.TUI.Menu;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Controller
+namespace HavocAndCry.Quoridor.TUI.Controller
 {
     public class GameController
     {
@@ -41,7 +40,8 @@ namespace HavocAndCry.Quoridor.ConsoleClient.Controller
 
             _gameMode = numOfPlayers switch
             {
-                1 => new VersusComputerGameMode(),
+                //1 => new VersusComputerGameMode(new SimpleBot()),
+                1 => new VersusComputerGameMode(new MinimaxBasedBot()),
                 < 5 => new VersusPlayersGameMode(numOfPlayers),
                 _ => throw new ArgumentOutOfRangeException()
             };

@@ -6,5 +6,6 @@ namespace HavocAndCry.Quoridor.Core.Pathfinding
     public interface IPathFinder
     {
         bool IsPathToFinishExists(Player player, IGameField gameField);
+        int DistanceToFinish(Player player, IGameField gameField);
     }
 }

@@ -1,6 +1,6 @@
-﻿using HavocAndCry.Quoridor.ConsoleClient.Abstract;
+﻿using HavocAndCry.Quoridor.TUI.Abstract;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Controller
+namespace HavocAndCry.Quoridor.TUI.Controller
 {
     public class VersusPlayersGameMode : AbstractGameMode
     {

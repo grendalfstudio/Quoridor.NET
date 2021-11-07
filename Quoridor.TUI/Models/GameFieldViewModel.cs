@@ -4,7 +4,7 @@ using System.Text;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Models
+namespace HavocAndCry.Quoridor.TUI.Models
 {
     public class GameFieldViewModel
     {

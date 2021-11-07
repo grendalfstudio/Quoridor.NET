@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HavocAndCry.Quoridor.Core.Models
+﻿namespace HavocAndCry.Quoridor.Core.Models
 {
     public struct WallCenter
     {
@@ -12,5 +10,10 @@ namespace HavocAndCry.Quoridor.Core.Models
 
         public int NorthRow { get; }
         public int WestColumn { get; }
+
+        public override string ToString()
+        {
+            return $"Row: {NorthRow}; Column: {WestColumn}";
+        }
     }
 }
