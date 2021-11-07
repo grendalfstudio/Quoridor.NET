@@ -1,6 +1,8 @@
 ﻿using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
 using System.Diagnostics;
+using System.Text;
+using System.Text.Json;
 using HavocAndCry.Quoridor.Bot.Abstract;
 
 namespace HavocAndCry.Quoridor.Bot
@@ -20,14 +22,19 @@ namespace HavocAndCry.Quoridor.Bot
             int beta = int.MaxValue;
             foreach (Move possibleMove in GetPossibleMoves(turnService, playerId))
             {
-                turnService.MakeMove(possibleMove, false);
+                bool moveSuccess = turnService.MakeMove(possibleMove, false);
+                if (!moveSuccess)
+                {
+                    continue;
+                }
                 int score = Minimax(turnService, MaxDepth - 1, playerId % 2 + 1, alpha, beta, false);
+                turnService.UndoLastMove();
+                
                 if (score > bestScore)
                 {
                     bestScore = score;
                     bestMove = possibleMove;
                 }
-                turnService.UndoLastMove();
 
                 alpha = Math.Max(alpha, bestScore);
             }
@@ -37,18 +44,22 @@ namespace HavocAndCry.Quoridor.Bot
                 return null;
             }
 
-            var moveSucceeded = turnService.MakeMove(bestMove);
+            bool moveSucceeded = turnService.MakeMove(bestMove);
             
             var time = timer.ElapsedMilliseconds;
-            //Console.WriteLine($"time for move: {time} ms");
-            //Console.ReadKey();
+            
+            if (time > 2000)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"[{DateTime.Now}] Bad bot speed = {time}");
+                File.AppendAllText(@"./log.txt", sb.ToString());
+            }
 
             return bestMove;
         }
         
         private int Minimax(ITurnService turnService, int depth, int playerId, int alpha, int beta, bool isBot)
         {
-            //Console.WriteLine("Huy");
             if (depth <= 0)
             {
                 int id = isBot ? playerId : playerId % 2 + 1;
@@ -62,7 +73,11 @@ namespace HavocAndCry.Quoridor.Bot
                     (!isBot && bestScore == int.MinValue))
                     return bestScore;
                 
-                turnService.MakeMove(possibleMove, false);
+                bool moveSuccess = turnService.MakeMove(possibleMove, false);
+                if (!moveSuccess)
+                {
+                    continue;
+                }
                 int score = Minimax(turnService, depth - 1, playerId % 2 + 1, alpha, beta, !isBot);
                 turnService.UndoLastMove();
 
@@ -126,14 +141,9 @@ namespace HavocAndCry.Quoridor.Bot
                 {
                     Wall horizontalWall = new Wall(WallType.Horizontal, new WallCenter(i, j));
                     Wall verticalWall = new Wall(WallType.Vertical, new WallCenter(i, j));
-                    if (turnService.IsWallValid(horizontalWall, playerId))
-                    {
-                        possibleWallsToSet.Add(horizontalWall);
-                    }
-                    if (turnService.IsWallValid(verticalWall, playerId))
-                    {
-                        possibleWallsToSet.Add(verticalWall);
-                    }
+                    
+                    possibleWallsToSet.Add(horizontalWall);
+                    possibleWallsToSet.Add(verticalWall);
                 }
             }
             return possibleWallsToSet;

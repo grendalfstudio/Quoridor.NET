@@ -29,7 +29,7 @@ namespace HavocAndCry.Quoridor.Core.Services
 
         public bool TryMove(Position position, int playerId, bool isRealMove = true)
         {
-            var player = _gameField.Players.First(p => p.PlayerId == playerId);
+            var player = Players.First(p => p.PlayerId == playerId);
             
             if (!TurnValidator.IsMoveValid(_gameField, position.Row, position.Column, player))
                 return false;
@@ -44,7 +44,7 @@ namespace HavocAndCry.Quoridor.Core.Services
 
         public bool TrySetWall(Wall wall, int playerId)
         {
-            if (!TurnValidator.IsWallValid(_gameField, wall, playerId, _pathFinder))
+            if (!IsWallValid(wall, playerId))
                 return false;
 
             _gameField.AddWall(wall);
@@ -84,25 +84,43 @@ namespace HavocAndCry.Quoridor.Core.Services
             switch (lastMove.TurnType)
             {
                 case TurnType.Move:
-                    var player = _gameField.Players.First(p => p.PlayerId == lastMove.PlayerId);
+                    var player = Players.First(p => p.PlayerId == lastMove.PlayerId);
                     player.MovePlayer(lastMove.PlayerRow, lastMove.PlayerColumn);
                     break;
                 case TurnType.SetWall:
                     _gameField.RemoveWall(lastMove.Wall);
-                    _gameField.Players[lastMove.PlayerId - 1].RemoveWall();
+                    Players[lastMove.PlayerId - 1].RemoveWall();
                     break;
             }
         }
 
         public bool IsWallValid(Wall wall, int playerId)
         {
-            return TurnValidator.IsWallValid(_gameField, wall, playerId, _pathFinder);
+            if (!TurnValidator.IsWallValid(_gameField, wall, playerId))
+            {
+                return false;
+            }
+            
+            _gameField.AddWall(wall);
+            Players[playerId-1].SetWall();
+
+            bool isPathDoesntExist = Players.Any(p => !_pathFinder.IsPathToFinishExists(p, _gameField));
+            
+            _gameField.RemoveWall(wall);
+            Players[playerId - 1].RemoveWall();
+
+            if (isPathDoesntExist)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public List<Position> GetPossibleMoves(int playerId)
         {
             List<Position> directions = new List<Position>();
-            var player = _gameField.Players.First(p => p.PlayerId == playerId);
+            var player = Players.First(p => p.PlayerId == playerId);
             for (int i = 1; i <= 8; i++)
             {
                 var coordinates = ((MoveDirection)i).ToCoordinates(player);
@@ -128,7 +146,7 @@ namespace HavocAndCry.Quoridor.Core.Services
 
         private (int, int) UpdateCoordinatesIfJump((int, int) coordinates, Player player)
         {
-            if (_gameField.Players.Any(p => p.Row == coordinates.Item1 && p.Column == coordinates.Item2))
+            if (Players.Any(p => p.Row == coordinates.Item1 && p.Column == coordinates.Item2))
             {
                 var newRow = player.Row - (player.Row - coordinates.Item1) * 2;
                 var newColumn = player.Column - (player.Column - coordinates.Item2) * 2;
@@ -140,8 +158,8 @@ namespace HavocAndCry.Quoridor.Core.Services
 
         public int EvaluatePosition(int playerId)
         {
-            Player currentPlayer = _gameField.Players.First(p => p.PlayerId == playerId);
-            Player oppositePlayer = _gameField.Players.First(p => p.PlayerId == playerId % 2 + 1);
+            Player currentPlayer = Players.First(p => p.PlayerId == playerId);
+            Player oppositePlayer = Players.First(p => p.PlayerId == playerId % 2 + 1);
             
             if (CheckWinCondition(currentPlayer))
                 return int.MaxValue;
