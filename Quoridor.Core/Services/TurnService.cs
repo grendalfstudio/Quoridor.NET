@@ -166,8 +166,8 @@ namespace HavocAndCry.Quoridor.Core.Services
             if (CheckWinCondition(oppositePlayer))
                 return int.MinValue;
             
-            int currentPlayerDistance = _pathFinder.DistanseToFinish(currentPlayer, _gameField);
-            int oppositePlayerDistance = _pathFinder.DistanseToFinish(oppositePlayer, _gameField);
+            int currentPlayerDistance = _pathFinder.DistanceToFinish(currentPlayer, _gameField);
+            int oppositePlayerDistance = _pathFinder.DistanceToFinish(oppositePlayer, _gameField);
             return oppositePlayerDistance - currentPlayerDistance;
         }
     }
