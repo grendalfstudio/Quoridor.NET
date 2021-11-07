@@ -42,17 +42,39 @@ namespace HavocAndCry.Quoridor.Core.Validators
 
         private static bool IsSpecialMoveValid(IGameField gameField, int row, int column, Player player)
         {
-            if (player.Row != row && player.Column != column)
+            bool isNotJump = player.Row != row && player.Column != column;
+            if (isNotJump)
             {
+                bool isWallBlocksColumnSituation = false;
+                bool isWallBlocksRowSituation = false;
+                if (column > player.Column)
+                {
+                    isWallBlocksColumnSituation = gameField.IsWallAt(new WallCenter(row, player.Column));
+                }
+                else
+                {
+                    isWallBlocksColumnSituation = gameField.IsWallAt(new WallCenter(row, column));
+                }
+                if (row > player.Row)
+                {
+                    isWallBlocksRowSituation = gameField.IsWallAt(new WallCenter(player.Row, column));
+                }
+                else
+                {
+                    isWallBlocksRowSituation = gameField.IsWallAt(new WallCenter(row, column));
+                }
+                
+                bool isSpecialColumnSituation = IsPlayerOnCell(gameField, row, player.Column)
+                                                && !CanJumpOnCell(gameField, player.Row - (player.Row - row) * 2,
+                                                    player.Column, player)
+                                                && !isWallBlocksColumnSituation;
+                bool isSpecialRowSituation = IsPlayerOnCell(gameField, player.Row, column)
+                                             && !CanJumpOnCell(gameField, player.Row,
+                                                 player.Column - (player.Column - column) * 2, player)
+                                             && !isWallBlocksRowSituation;
+                
                 if (!IsPlayerOnCell(gameField, row, column)
-                    && ((IsPlayerOnCell(gameField, row, player.Column)
-                        && !CanJumpOnCell(gameField, player.Row - (player.Row - row) * 2, player.Column, player)
-                        && !IsWallBetweenCells(gameField, row, player.Column, 
-                            row, column))
-                        || (IsPlayerOnCell(gameField, player.Row, column)
-                        && !CanJumpOnCell(gameField, player.Row, player.Column - (player.Column - column) * 2, player)
-                        && !IsWallBetweenCells(gameField, player.Row, column, 
-                            row, column))))
+                    && ( isSpecialColumnSituation || isSpecialRowSituation))
                 {
                     return true;
                 }

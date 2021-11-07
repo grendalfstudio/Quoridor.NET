@@ -9,7 +9,7 @@ namespace HavocAndCry.Quoridor.Core.Pathfinding
     {
         public bool IsPathToFinishExists(Player player, IGameField gameField)
         {
-            if (DistanceToFinish(player, gameField) != -1)
+            if (DistanceToFinish(player, gameField) > 0)
             {
                 return true;
             }
