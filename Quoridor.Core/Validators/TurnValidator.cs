@@ -117,7 +117,7 @@ namespace HavocAndCry.Quoridor.Core.Validators
             return false;
         }
 
-        public static bool IsWallValid(IGameField gameField, Wall newWall, int playerId, IPathFinder pathFinder)
+        public static bool IsWallValid(IGameField gameField, Wall newWall, int playerId)
         {
             if (gameField.Players.First(p => p.PlayerId == playerId).WallsCount <= 0)
             {
@@ -150,15 +150,7 @@ namespace HavocAndCry.Quoridor.Core.Validators
             {
                 return false;
             }
-
-            IGameField futureGameField = (IGameField)gameField.Clone();
-            futureGameField.AddWall(newWall);
-
-            if (futureGameField.Players.Any(p => !pathFinder.IsPathToFinishExists(p, futureGameField)))
-            {
-                return false;
-            }
-
+            
             return true;
         }
     }
