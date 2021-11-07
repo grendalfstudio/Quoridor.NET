@@ -2,7 +2,7 @@
 using System.Text;
 using HavocAndCry.Quoridor.Core.Abstract;
 
-namespace HavocAndCry.Quoridor.ConsoleClient.Models;
+namespace HavocAndCry.Quoridor.TUI.Models;
 
 public class ConsoleView
 {

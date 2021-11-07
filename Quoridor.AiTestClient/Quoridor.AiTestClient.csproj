@@ -1,12 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>HavocAndCry.Quoridor.AiTestClient</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\HavocAndCry.Quoridor.Bot\HavocAndCry.Quoridor.Bot.csproj" />
       <ProjectReference Include="..\Quoridor.Core\Quoridor.Core.csproj" />
     </ItemGroup>
 

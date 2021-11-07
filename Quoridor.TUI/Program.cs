@@ -1,5 +1,5 @@
 ﻿using System;
-using HavocAndCry.Quoridor.ConsoleClient.Controller;
+using HavocAndCry.Quoridor.TUI.Controller;
 
 var game = new GameController();
 game.StartGame();
