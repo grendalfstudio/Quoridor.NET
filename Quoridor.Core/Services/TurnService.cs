@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
@@ -42,9 +43,9 @@ namespace HavocAndCry.Quoridor.Core.Services
             return true;
         }
 
-        public bool TrySetWall(Wall wall, int playerId)
+        public bool TrySetWall(Wall wall, int playerId, bool fromInput = false)
         {
-            if (!IsWallValid(wall, playerId))
+            if (!TurnValidator.IsWallValid(_gameField, wall, playerId, fromInput))
                 return false;
 
             _gameField.AddWall(wall);
@@ -94,9 +95,9 @@ namespace HavocAndCry.Quoridor.Core.Services
             }
         }
 
-        public bool IsWallValid(Wall wall, int playerId)
+        public bool IsWallValid(Wall wall, int playerId, bool fromInput = false)
         {
-            if (!TurnValidator.IsWallValid(_gameField, wall, playerId))
+            if (!TurnValidator.IsWallValid(_gameField, wall, playerId, fromInput))
             {
                 return false;
             }
@@ -111,6 +112,9 @@ namespace HavocAndCry.Quoridor.Core.Services
 
             if (isPathDoesntExist)
             {
+                if(fromInput)
+                    File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {wall} from player {playerId} is not valid, because it blocks way for at least one player\n\n");
+                
                 return false;
             }
 

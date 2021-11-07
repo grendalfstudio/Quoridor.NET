@@ -35,6 +35,12 @@ namespace HavocAndCry.Quoridor.Bot
                     bestScore = score;
                     bestMove = possibleMove;
                 }
+                else if (bestMove == null && score == bestScore)
+                {
+                    bestMove = possibleMove;
+                    File.AppendAllText(@"./log.jsonc", $"\n//[{DateTime.Now}] All moves lead to opponent's victory. We can't do anything... \n");
+
+                }
 
                 alpha = Math.Max(alpha, bestScore);
             }
@@ -51,8 +57,8 @@ namespace HavocAndCry.Quoridor.Bot
             if (time > 2000)
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"[{DateTime.Now}] Bad bot speed = {time}");
-                File.AppendAllText(@"./log.txt", sb.ToString());
+                sb.AppendLine($"//[{DateTime.Now}] Bad bot speed = {time}");
+                File.AppendAllText(@"./log.jsonc", sb.ToString());
             }
 
             return bestMove;

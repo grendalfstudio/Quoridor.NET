@@ -10,5 +10,10 @@
         
         public WallType Type { get; }
         public WallCenter WallCenter { get; }
+
+        public override string ToString()
+        {
+            return $"[Center = {WallCenter}; Type = {Type.ToString()}]";
+        }
     }
 }

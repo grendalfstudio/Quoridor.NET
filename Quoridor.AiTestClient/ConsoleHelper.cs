@@ -28,6 +28,9 @@ public static class ConsoleHelper
 
     public static void WriteTurn(Move move)
     {
+        if(move is null)
+            File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Move is null \n");
+        
         switch (move.TurnType)
         {
             case TurnType.Move:
