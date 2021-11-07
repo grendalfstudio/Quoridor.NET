@@ -13,4 +13,9 @@
       <ProjectReference Include="..\Quoridor.Core\Quoridor.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="2.10.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    </ItemGroup>
+
 </Project>

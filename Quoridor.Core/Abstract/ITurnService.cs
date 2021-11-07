@@ -10,10 +10,10 @@ namespace HavocAndCry.Quoridor.Core.Abstract
         IReadOnlyList<Player> Players { get; }
         IReadOnlyList<Wall> Walls { get; }
         bool TryMove(Position position, int playerId, bool isRealMove = true);
-        bool TrySetWall(Wall wall, int playerId);
+        bool TrySetWall(Wall wall, int playerId, bool fromInput = false);
         bool MakeMove(Move move, bool isRealMove = true);
         void UndoLastMove();
-        bool IsWallValid(Wall wall, int playerId);
+        bool IsWallValid(Wall wall, int playerId, bool fromInput = false);
         int EvaluatePosition(int playerId);
         List<Position> GetPossibleMoves(int playerId);
     }

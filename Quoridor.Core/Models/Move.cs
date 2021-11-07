@@ -20,13 +20,9 @@
 
         public int PlayerId { get; }
         public TurnType TurnType { get; }
-        public MoveDirection MoveDirection { get; }
         public Wall Wall { get; }
         public int PlayerRow { get; }
         public int PlayerColumn { get; }
-        
         public Position Position { get; set; }
-        public int Row { get; set; }
-        public int Column { get; set; }
     }
 }
