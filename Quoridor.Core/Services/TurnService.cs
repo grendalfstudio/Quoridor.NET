@@ -45,7 +45,7 @@ namespace HavocAndCry.Quoridor.Core.Services
 
         public bool TrySetWall(Wall wall, int playerId, bool fromInput = false)
         {
-            if (!TurnValidator.IsWallValid(_gameField, wall, playerId, fromInput))
+            if (!IsWallValid(wall, playerId, fromInput))
                 return false;
 
             _gameField.AddWall(wall);
