@@ -1,12 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using HavocAndCry.Quoridor.Core.Abstract;
 using HavocAndCry.Quoridor.Core.Models;
-using HavocAndCry.Quoridor.Core.Pathfinding;
-using Serilog;
 
 namespace HavocAndCry.Quoridor.Core.Validators
 {
@@ -71,10 +67,12 @@ namespace HavocAndCry.Quoridor.Core.Validators
                 bool isSpecialColumnSituation = IsPlayerOnCell(gameField, row, player.Column)
                                                 && !CanJumpOnCell(gameField, player.Row - (player.Row - row) * 2,
                                                     player.Column, player)
+                                                && !IsWallBetweenCells(gameField, row, player.Column, row, column)
                                                 && !isWallBlocksSituation;
                 bool isSpecialRowSituation = IsPlayerOnCell(gameField, player.Row, column)
                                              && !CanJumpOnCell(gameField, player.Row,
                                                  player.Column - (player.Column - column) * 2, player)
+                                             && !IsWallBetweenCells(gameField, player.Row, column, row, column)
                                              && !isWallBlocksSituation;
                 
                 if (!IsPlayerOnCell(gameField, row, column)
@@ -135,7 +133,8 @@ namespace HavocAndCry.Quoridor.Core.Validators
             
             if (!IsPlayerOnCell(gameField, row, column)
                 && IsPlayerOnCell(gameField, specialCellRow, specialCellColumn)
-                && !IsWallBetweenCells(gameField, specialCellRow, specialCellColumn, row, column))
+                && !IsWallBetweenCells(gameField, specialCellRow, specialCellColumn, row, column)
+                && !IsWallBetweenCells(gameField, player.Row, player.Column, specialCellRow, specialCellColumn))
             {
                 return true;
             }
@@ -148,11 +147,8 @@ namespace HavocAndCry.Quoridor.Core.Validators
             if (gameField.Players.First(p => p.PlayerId == playerId).WallsCount <= 0)
             {
                 if(fromInput)
-                {
-                    Log.Information("Wall {@wall} is not valid, because player {id} don't have available walls", newWall, playerId);
-                    
                     File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {newWall} is not valid, because player {playerId} don't have available walls\n\n");
-                }                
+                                
                 return false;
             }
             
@@ -162,22 +158,16 @@ namespace HavocAndCry.Quoridor.Core.Validators
                 || newWall.WallCenter.WestColumn > gameField.Size - 2)
             {
                 if(fromInput)
-                {
-                    Log.Information("Wall {@wall} from player {id} is not valid, because it's coords outside of field",
-                        newWall, playerId);
                     File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {newWall} from player {playerId} is not valid, because it's coords outside of field\n\n");
-                }                
+                                
                 return false;
             }
 
             if (gameField.IsWallAt(newWall.WallCenter))
             {
                 if(fromInput)
-                {
-                    Log.Information("Wall {@wall} from player {id} is not valid, because there is already wall at this coords",
-                        newWall, playerId);
                     File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {newWall} from player {playerId} is not valid, because there is already wall at this coords\n\n");
-                }                
+                
                 return false;
             }
             
@@ -186,11 +176,8 @@ namespace HavocAndCry.Quoridor.Core.Validators
                 || gameField.IsWallAt(new WallCenter(newWall.WallCenter.NorthRow, newWall.WallCenter.WestColumn + 1), WallType.Horizontal)))
             {
                 if(fromInput)
-                {
-                    Log.Information("Wall {@wall} from player {id} is not valid, because it overlaps with other horizontal wall",
-                        newWall, playerId);
                     File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {newWall} from player {playerId} is not valid, because it overlaps with other horizontal wall\n\n");
-                }                
+                
                 return false;
             }
             
@@ -199,11 +186,8 @@ namespace HavocAndCry.Quoridor.Core.Validators
                 || gameField.IsWallAt(new WallCenter(newWall.WallCenter.NorthRow + 1, newWall.WallCenter.WestColumn), WallType.Vertical)))
             {
                 if(fromInput)
-                {
-                    Log.Information("Wall {@wall} from player {id} is not valid, because it overlaps with other vertical wall",
-                        newWall, playerId);
                     File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {newWall} from player {playerId} is not valid, because it overlaps with other vertical wall\n\n");
-                }                
+                                
                 return false;
             }
             
