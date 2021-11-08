@@ -135,7 +135,8 @@ namespace HavocAndCry.Quoridor.Core.Validators
             
             if (!IsPlayerOnCell(gameField, row, column)
                 && IsPlayerOnCell(gameField, specialCellRow, specialCellColumn)
-                && !IsWallBetweenCells(gameField, specialCellRow, specialCellColumn, row, column))
+                && !IsWallBetweenCells(gameField, specialCellRow, specialCellColumn, row, column)
+                && !IsWallBetweenCells(gameField, player.Row, player.Column, specialCellRow, specialCellColumn))
             {
                 return true;
             }
