@@ -10,7 +10,7 @@ namespace HavocAndCry.Quoridor.Bot
     public class MinimaxBasedBot : IBot
     {
         private const int MaxDepth = 2;
-        private const int MaxWallsRange = 3;
+        private const int MaxWallsRange = 4;
 
         public Move MakeMove(ITurnService turnService, int playerId)
         {
