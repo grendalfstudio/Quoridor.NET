@@ -110,15 +110,13 @@ namespace HavocAndCry.Quoridor.Core.Services
             _gameField.RemoveWall(wall);
             Players[playerId - 1].RemoveWall();
 
-            if (isPathDoesntExist)
-            {
-                if(fromInput)
-                    File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {wall} from player {playerId} is not valid, because it blocks way for at least one player\n\n");
+            if (!isPathDoesntExist) 
+                return true;
+            
+            if(fromInput)
+                File.AppendAllText(@"./log.jsonc", $"//[{DateTime.Now}] Wall {wall} from player {playerId} is not valid, because it blocks way for at least one player\n\n");
                 
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         public List<Position> GetPossibleMoves(int playerId)

@@ -6,7 +6,6 @@ using HavocAndCry.Quoridor.Core.Models;
 using HavocAndCry.Quoridor.Core.Pathfinding;
 using HavocAndCry.Quoridor.Core.Services;
 using HavocAndCry.Quoridor.Bot.Abstract;
-using Serilog;
 
 namespace HavocAndCry.Quoridor.AiTestClient
 {
@@ -63,8 +62,6 @@ namespace HavocAndCry.Quoridor.AiTestClient
         {
             if(!_turnService.TryMove(turn.Position, turn.PlayerId))
             {
-                Log.Information("Can't move player {color} to {pos}", _activeColor, turn.Position);
-                
                 var sb = new StringBuilder();
                 sb.AppendLine($"\n//[{DateTime.Now}] Can't move to {turn.Position}");
                 var field = JsonSerializer.Serialize(_gameField);
@@ -77,8 +74,6 @@ namespace HavocAndCry.Quoridor.AiTestClient
         {
             if(!_turnService.TrySetWall(turn.Wall, turn.PlayerId, true))
             {
-                Log.Information("Can't place wall {@wall}", turn.Wall);
-                
                 var sb = new StringBuilder();
                 sb.AppendLine($"\n//[{DateTime.Now}] Can't place wall at {turn.Wall}");
                 var field = JsonSerializer.Serialize(_gameField);
